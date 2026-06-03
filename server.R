@@ -99,42 +99,6 @@ shinyServer(function(input, output, session){
                                     wordcloud2(data = data.frame(word = names(freq_table), freq = as.numeric(freq_table)),
                                             color = "random-light", backgroundColor = "white")
                 })
-
-                # Generate lolliplot
-                output$lolliplot <- renderPlot({
-                                                req(input$lncrna_input)
-                                                res <- analysis_result()
-
-                                                load(file = "data/lncRNA_bed_data.RData")
-                                                exons <- lncRNA_bed_data %>%
-                                                        filter(lncRNA_name == input$lncrna_input, region == "exon")
-                                                if (nrow(exons) == 0) return(NULL)
-                                                exons_gr <- makeGRangesFromDataFrame(exons, keep.extra.columns = TRUE,
-                                                            seqnames.field = "chr", start.field = "start", end.field = "end"
-                                                )
-                                                num_exons <- nrow(exons)
-                                                exons_gr$height <- rep(list(c(0.1)), length(num_exons))
-                                                exon_colors <- sample(colors(), num_exons)
-                                                exons_gr$fill <- list(exon_colors)
-
-                                                lncRNA_info <- lncRNA_bed_data %>%
-                                                            filter(lncRNA_name == input$lncrna_input)
-                                                if (nrow(lncRNA_info) == 0) return(NULL)
-                                                chr_target <- as.character(lncRNA_info$chr[1])
-                                                range <- c(min(lncRNA_info$start), max(lncRNA_info$end))
-                                                rm(lncRNA_bed_data)
-                                                
-                                                load(file = "data/protein_binding_data.RData")
-                                                prot_bindings <- protein_binding_data %>%
-                                                                    filter(chr == chr_target, between(position, range[1], range[2]))
-                                                if (nrow(prot_bindings) == 0) return(NULL)
-                                                rm(protein_binding_data)
-                                                proteins <- unique(prot_bindings$protein_name)
-                                                protein_gr <- GRanges(chr_target, IRanges(prot_bindings$position, width=1, names=c(prot_bindings$protein_name)))
-
-                                                dandelion.plot(protein_gr, exons_gr,type="circle",ylab="",yaxis=FALSE, xaxis = F)
-                                                grid.text(input$lncrna_input, x=.5, y=.98, just="top",  gp=gpar(cex=1.5, fontface="bold"))
-                                            })
                 
                 # Generate PPI from Protein_name
                   output$network <- renderPlot({res <- analysis_result()

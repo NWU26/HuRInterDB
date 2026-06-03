@@ -157,9 +157,6 @@ shinyUI(
                                    div(class = "resultBox", h3("📊 Interaction Analysis Results"),
                                         fluidRow(column(6, 
                                                         withSpinner(wordcloud2Output("wordcloud",  width = "700px", height = "360px"), type = 6, color = "#0277bd")
-                                                        ),
-                                                 column(6, 
-                                                        withSpinner(plotOutput("lolliplot", width = "100%", height = "360px"), type = 6, color = "#0277bd")
                                                         )
                                           ),
                                           hr(),
