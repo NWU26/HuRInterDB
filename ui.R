@@ -128,7 +128,7 @@ shinyUI(
                             column(width = 12, 
                                    ##-- Outputs ----
                                    titlePanel(h3("Search results:", style = "color: #0277bd; text-align: left;")) ,
-                                   DT::dataTableOutput("result_table"),
+                                   withSpinner(dataTableOutput("result_table"), type = 6, color = "#0277bd"),
                                    ##-- Download ----
                                    downloadButton("download_data", "Download Results")
                             )
@@ -155,18 +155,26 @@ shinyUI(
                                    ##-- Outputs ----
                                    # Fig result
                                    div(class = "resultBox", h3("📊 Interaction Analysis Results"),
-                                        fluidRow(column(6, wordcloud2Output("wordcloud", width = "700px", height = "360px")),
-                                                 column(6, plotOutput("lolliplot", width = "100%", height = "360px"))
+                                        fluidRow(column(6, 
+                                                        withSpinner(wordcloud2Output("wordcloud",  width = "700px", height = "360px"), type = 6, color = "#0277bd")
+                                                        ),
+                                                 column(6, 
+                                                        withSpinner(plotOutput("lolliplot", width = "100%", height = "360px"), type = 6, color = "#0277bd")
+                                                        )
                                           ),
                                           hr(),
-                                        fluidRow(column(6, plotOutput('network',  width = "100%", height = "300px")),
-                                                 column(6, plotOutput("godotplot", width = "100%", height = "300px"))
+                                        fluidRow(column(6, 
+                                                        withSpinner(plotOutput('network', width = "100%", height = "300px"), type = 6, color = "#0277bd")
+                                                        ),
+                                                 column(6, 
+                                                        withSpinner(plotOutput("godotplot", width = "100%", height = "300px"), type = 6, color = "#0277bd")
+                                                        )
                                           )
                                    ),
                                    # Table result
                                    div(class = "resultBox",
                                           h3("📋 List of Interacting Proteins"),
-                                          DT::dataTableOutput("analysis_table"),
+                                          withSpinner(DT::dataTableOutput("analysis_table"), type = 6, color = "#0277bd"),
                                           downloadLink(outputId = "download_table_csv", icon = icon("download"), label = "Download (CSV)")
                                    )
               ),

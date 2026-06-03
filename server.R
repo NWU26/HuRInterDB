@@ -135,25 +135,22 @@ shinyServer(function(input, output, session){
                                                 dandelion.plot(protein_gr, exons_gr,type="circle",ylab="",yaxis=FALSE, xaxis = F)
                                                 grid.text(input$lncrna_input, x=.5, y=.98, just="top",  gp=gpar(cex=1.5, fontface="bold"))
                                             })
-
                 
-                # Get the PPI network
                 # Generate PPI from Protein_name
                   output$network <- renderPlot({res <- analysis_result()
-{                                               proteins_freq <- as.data.frame(table(res$Protein_name))
+                                               proteins_freq <- as.data.frame(table(res$Protein_name))
                                                 colnames(proteins_freq) <- c("protein_symbol","freq")
-                                                proteins_freq <- proteins_freq[-1, ]
+                                                proteins_freq <- proteins_freq[which(proteins_freq$freq > 1), ]
                                                 proteins_freq$protein_symbol <- as.character(proteins_freq$protein_symbol)
 
                                                 g <- getPPI(proteins_freq$protein_symbol, taxID="9606")
-                                                ggplot(g) %<+% proteins_freq + 
+                                                ggplot(g, layout='circular') %<+% proteins_freq + 
                                                 geom_edge() + 
                                                 geom_point(aes(color = freq), size = 8) + 
                                                 shadowtext::geom_shadowtext(aes(label = name), color="black", bg.color="white") +
-                                                #scale_color_gradient2(low = "blue", mid = "white", high = "red") +
                                                 enrichplot::set_enrichplot_color(reverse=F) +
                                                 theme_void()
-}                                                })
+                                                })
 
                 # Generate GO from Protein_name
                 output$godotplot <- renderPlot({
@@ -162,7 +159,6 @@ shinyServer(function(input, output, session){
                     proteins_list <- proteins_list[nchar(proteins_list) > 0]
 
                     go_result <- enrichGO(gene = proteins_list,
-                                          #universe = keys(org.Hs.eg.db, keytype = "ENTREZID"),
                                           OrgDb = org.Hs.eg.db,
                                           keyType = "SYMBOL",
                                           ont = "ALL",
@@ -175,7 +171,6 @@ shinyServer(function(input, output, session){
                             font.size = 11,
                             title = "GO Pathway Enrichment") +
                            theme(text = element_text(size = 12))
-
                 })
 
                 # Display detailed table (same format as Search page)
