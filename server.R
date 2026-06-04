@@ -111,7 +111,7 @@ shinyServer(function(input, output, session){
                                                 ggplot(g, layout='circular') %<+% proteins_freq + 
                                                 geom_edge() + 
                                                 geom_point(aes(color = freq), size = 8) + 
-                                                shadowtext::geom_shadowtext(aes(label = name), color="black", bg.color="white") +
+                                                shadowtext::geom_shadowtext(aes(label = name), family = "DejaVu Sans", color="black", bg.color="white") +
                                                 enrichplot::set_enrichplot_color(reverse=F) +
                                                 theme_void() +
                                                 theme(text = element_text(family = "DejaVu Sans",size = 10),
