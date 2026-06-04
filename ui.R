@@ -157,14 +157,14 @@ shinyUI(
                                    div(class = "resultBox", h3("📊 Interaction Analysis Results"),
                                         fluidRow(column(6, 
                                                         withSpinner(wordcloud2Output("wordcloud",  width = "700px", height = "360px"), type = 6, color = "#0277bd")
+                                                        ),
+                                                 column(6, 
+                                                        withSpinner(plotOutput("godotplot", width = "100%", height = "360px"), type = 6, color = "#0277bd")
                                                         )
                                           ),
                                           hr(),
-                                        fluidRow(column(6, 
-                                                        withSpinner(plotOutput('network', width = "100%", height = "300px"), type = 6, color = "#0277bd")
-                                                        ),
-                                                 column(6, 
-                                                        withSpinner(plotOutput("godotplot", width = "100%", height = "300px"), type = 6, color = "#0277bd")
+                                        fluidRow(column(10, 
+                                                        withSpinner(plotOutput('network', width = "100%", height = "400px"), type = 6, color = "#0277bd")
                                                         )
                                           )
                                    ),
