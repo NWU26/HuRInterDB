@@ -114,10 +114,7 @@ shinyServer(function(input, output, session){
                                                 shadowtext::geom_shadowtext(aes(label = name), color="black", bg.color="white") +
                                                 enrichplot::set_enrichplot_color(reverse=F) +
                                                 theme_void() +
-                                                theme(text = element_text(size = 12),
-                                                    axis.text.y  = element_text(family = "DejaVu Sans", size = 10),
-                                                    axis.text.x  = element_text(family = "DejaVu Sans", size = 9),
-                                                    axis.title   = element_text(family = "DejaVu Sans", size = 12),
+                                                theme(text = element_text(family = "DejaVu Sans",size = 10),
                                                     legend.text  = element_text(family = "DejaVu Sans"),
                                                     legend.title = element_text(family = "DejaVu Sans"),
                                                     plot.title   = element_text(family = "DejaVu Sans", face = "bold"))
