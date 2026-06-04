@@ -9,6 +9,8 @@ library(clusterProfiler)
 library(org.Hs.eg.db)
 library(ggtangle)
 library(ggplot2)
+theme_set(theme_bw(base_family = "DejaVu Sans"))
+options(ggplot2.device = "png")
 
 ##---- Load RPIs Data ----
 load(file = "data/data.RData")

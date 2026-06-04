@@ -113,7 +113,15 @@ shinyServer(function(input, output, session){
                                                 geom_point(aes(color = freq), size = 8) + 
                                                 shadowtext::geom_shadowtext(aes(label = name), color="black", bg.color="white") +
                                                 enrichplot::set_enrichplot_color(reverse=F) +
-                                                theme_void()
+                                                theme_void() +
+                                                theme(text = element_text(size = 12),
+                                                    axis.text.y  = element_text(family = "DejaVu Sans", size = 10),
+                                                    axis.text.x  = element_text(family = "DejaVu Sans", size = 9),
+                                                    axis.title   = element_text(family = "DejaVu Sans", size = 12),
+                                                    legend.text  = element_text(family = "DejaVu Sans"),
+                                                    legend.title = element_text(family = "DejaVu Sans"),
+                                                    plot.title   = element_text(family = "DejaVu Sans", face = "bold"))
+                                                
                                                 })
 
                 # Generate GO from Protein_name
@@ -134,8 +142,15 @@ shinyServer(function(input, output, session){
                             label_format = 50,
                             font.size = 11,
                             title = "GO Pathway Enrichment") +
-                           theme(text = element_text(size = 12))
+                           theme(text = element_text(size = 12),
+                            axis.text.y  = element_text(family = "DejaVu Sans", size = 10),
+                            axis.text.x  = element_text(family = "DejaVu Sans", size = 9),
+                            axis.title   = element_text(family = "DejaVu Sans", size = 12),
+                            legend.text  = element_text(family = "DejaVu Sans"),
+                            legend.title = element_text(family = "DejaVu Sans"),
+                            plot.title   = element_text(family = "DejaVu Sans", face = "bold"))
                 })
+
 
                 # Display detailed table (same format as Search page)
                 output$analysis_table <- DT::renderDataTable({
