@@ -95,7 +95,7 @@ shinyServer(function(input, output, session){
                                     if (is.null(res) || nrow(res) == 0) return(NULL)
                                     
                                     proteins <- res$Protein_name
-                                    freq_table <- head(sort(table(proteins), decreasing = TRUE), n = 20)
+                                    freq_table <- sort(table(proteins), decreasing = TRUE)
                                     wordcloud2(data = data.frame(word = names(freq_table), freq = as.numeric(freq_table)),
                                             color = "random-light", backgroundColor = "white")
                 })
@@ -104,7 +104,7 @@ shinyServer(function(input, output, session){
                   output$network <- renderPlot({res <- analysis_result()
                                                proteins_freq <- as.data.frame(table(res$Protein_name))
                                                 colnames(proteins_freq) <- c("protein_symbol","freq")
-                                                proteins_freq <- proteins_freq[which(proteins_freq$freq > 1), ]
+                                                proteins_freq <- proteins_freq[which(proteins_freq$freq > 0), ]
                                                 proteins_freq$protein_symbol <- as.character(proteins_freq$protein_symbol)
 
                                                 g <- getPPI(proteins_freq$protein_symbol, taxID="9606")
