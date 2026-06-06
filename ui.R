@@ -78,7 +78,7 @@ shinyUI(
                                           idx <- (row - 1) * 4 + col
                                           db_list <- list(
                                           list(name = "FANTOM", url = "https://fantom.gsc.riken.jp"),
-                                          list(name = "miRBase", url = "http://mirbase.org"),
+                                          list(name = "RNAcentral", url = "https://rnacentral.org/"),
                                           list(name = "LncRNADisease", url = "http://www.rnanut.net/lncrnadisease/"),
                                           list(name = "Lnc2Cancer", url = "http://bio-bigdata.hrbmu.edu.cn/lnc2cancer/"),
                                           list(name = "Mfold", url = "http://www.unafold.org/mfold/applications/rna-folding-form.php"),
