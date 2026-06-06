@@ -14,6 +14,15 @@ options(ggplot2.device = "png")
 
 ##---- Load RPIs Data ----
 load(file = "data/data.RData")
+RNA_list <- unique(data$lncRNA_Name)
+protein_list <- unique(data$Protein_name)
+cell_list <- unique(data$Cell_Line)
+RNA_list <- sort(RNA_list)
+protein_list <- sort(protein_list)
+cell_list <- sort(cell_list)
+RNA_list <- c("", RNA_list)
+protein_list <- c("", protein_list)
+cell_list <- c("", cell_list)
 
 ##---- Data Preprocessing
 prepare_data_with_links <- function(df) {
