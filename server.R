@@ -95,6 +95,42 @@ shinyServer(function(input, output, session){
                                     if (is.null(res) || nrow(res) == 0) return(NULL)
                                     generate_wordcloud(res)
                 })
+
+                # Generate lolliplot
+                output$lolliplot <- renderPlot({
+                                                req(input$lncrna_input)
+                                                rna_name <- trimws(input$lncrna_input)
+                                                
+                                                # 筛选数据                                               
+                                                lncRNA_info <- lncRNA_bed_data %>% 
+                                                    filter(lncRNA_name == rna_name)
+                                                if(nrow(lncRNA_info) == 0) return(NULL)
+                                                exons <- lncRNA_info %>%
+                                                    filter(region == "exon")
+                                                chr_target <- as.character(lncRNA_info$chr[1])
+                                                pos_min <- min(lncRNA_info$start)
+                                                pos_max <- max(lncRNA_info$end)
+                                                prot_bindings <- protein_binding_data %>%
+                                                    filter(chr == chr_target, between(position, pos_min, pos_max))
+                                                if(nrow(prot_bindings) == 0) return(NULL)
+                                                
+                                               p <- ggplot() +
+                                                    geom_hline(yintercept = 0.1, linewidth = 1.5, color = "black", linetype = "solid") +
+                                                    geom_rect(data = exons, aes(xmin = start, xmax = end, ymin = 0, ymax = 0.2), fill = rep("#7EB7DC", nrow(exons))) +
+                                                    geom_segment(data = prot_bindings, aes(x = position, xend = position, y = 0.2, yend = 1),linewidth = 0.3, colour = "black") +
+                                                    geom_point(data = prot_bindings, aes(x = position, y = 1), size = 3, alpha = 0.7, fill = "#E64B35", shape = 21) +
+                                                    # 蛋白名称注释
+                                                    geom_text(data = prot_bindings, aes(x = position, y = 1.08, label = protein_name),
+                                                              family = "DejaVu Sans",size = 3, angle = 90, hjust = 0, color = "black") +
+                                                    xlim(pos_min, pos_max) +
+                                                    ylim(-0.2, 1.8) +
+                                                    theme_void() +
+                                                    labs(title = rna_name) +
+                                                    theme(plot.title = element_text(hjust = 0.5, size = 16, family = "DejaVu Sans", face = "bold"))
+                                                print(p)
+                                                rm(exons, lncRNA_info, prot_bindings)
+                                                gc()
+                })
                 
                 # Generate PPI from Protein_name
                   output$network <- renderPlot({res <- analysis_result()
@@ -111,10 +147,9 @@ shinyServer(function(input, output, session){
                                                 enrichplot::set_enrichplot_color(reverse=F) +
                                                 theme_void() +
                                                 theme(text = element_text(family = "DejaVu Sans",size = 10),
-                                                    legend.text  = element_text(family = "DejaVu Sans"),
-                                                    legend.title = element_text(family = "DejaVu Sans"),
-                                                    plot.title   = element_text(family = "DejaVu Sans", face = "bold"))
-                                                
+                                                      legend.text  = element_text(family = "DejaVu Sans"),
+                                                      legend.title = element_text(family = "DejaVu Sans"),
+                                                      plot.title   = element_text(family = "DejaVu Sans", face = "bold"))
                                                 })
 
                 # Generate GO from Protein_name
@@ -130,7 +165,7 @@ shinyServer(function(input, output, session){
                                           pAdjustMethod = "BH",
                                           pvalueCutoff = 0.99,
                                           qvalueCutoff = 0.99)                    
-                    dotplot(go_result, showCategory = 10, 
+                    dotplot(go_result, showCategory = 15, 
                             color = "pvalue",
                             label_format = 50,
                             font.size = 11,

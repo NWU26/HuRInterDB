@@ -13,12 +13,12 @@ shinyUI(
     list(tags$head(HTML('<link rel="icon", href="img/logo.png",type="image/png" />'))),
     div(style="padding: 1px 0px; width: '50%'",
         titlePanel(
-          title="", windowTitle = "HuRInterDB"
+          title ="HuRInterDB", windowTitle = "HuRInterDB"
         )
     ),
     ##-- Header ----
     navbarPage(title = div(img(src="img/logo.png", height = "50px"), style = "padding-left:40px;"),
-               id = "navbar", selected = "Home", theme = "styles.css",  fluid = T,
+               id = "navbar", selected = "Home", theme = "styles.css", fluid = T,
 ###------ Home  ------###
               home <- tabPanel(title = "Home", value = "home", icon = icon("house"),
                             br(), hr(), 
@@ -113,10 +113,10 @@ shinyUI(
               search <- tabPanel(title = "Search", value = "searchs", icon = icon("magnifying-glass"),
                             br(), hr(),
                             column(width = 10,style = "padding-top: 0px;",
-                                   column(2, textInput(inputId = "filter_gene", label = "lncRNA")),
-                                   column(2, textInput(inputId = "filter_protein", label = "Protein")),
-                                   column(2, textInput(inputId = "filter_cellline", label = "Cell Line")),
-                                   column(2, selectInput("filter_method", label = "Method", 
+                                   column(2, selectInput(inputId = "filter_gene", label = "lncRNA", choices = RNA_list)),
+                                   column(2, selectInput(inputId = "filter_protein", label = "Protein", choices = protein_list)),
+                                   column(2, selectInput(inputId = "filter_cellline", label = "Cell Line", choices = cell_list)),
+                                   column(2, selectInput(inputId = "filter_method", label = "Method", 
                                                          choices = c("","RNA Pulldown","ChIRP-MS","RAP-MS","HyPR-MS","HPLC-MS","CARPID","SILAC-MS","TREX",
                                                                       "RIP-seq","eCLIP-seq","CLIP-seq","PAR-CLIP","HITS-CLIP","LACE-seq","ARTR-seq",
                                                                       "PRIM-seq")))
@@ -134,7 +134,7 @@ shinyUI(
                             )
               ),
 ###------ Analysis  ------###
-              RPIanalysis <- tabPanel(title = "RPIanalysis",  value = "RPIanalysis", icon = icon("atom"),
+              RPIanalysis <- tabPanel(title = "RPIanalysis", value = "RPIanalysis", icon = icon("atom"),
                                    br(), hr(), 
                                    tags$head(
                                    tags$style("
@@ -155,17 +155,11 @@ shinyUI(
                                    ##-- Outputs ----
                                    # Fig result
                                    div(class = "resultBox", h3("📊 Interaction Analysis Results"),
-                                        fluidRow(column(6, 
-                                                        withSpinner(wordcloud2Output("wordcloud",  width = "700px", height = "360px"), type = 6, color = "#0277bd")
-                                                        ),
-                                                 column(6, 
-                                                        withSpinner(plotOutput("godotplot", width = "100%", height = "360px"), type = 6, color = "#0277bd")
-                                                        )
-                                          ),
-                                          hr(),
-                                        fluidRow(column(10, 
-                                                        withSpinner(plotOutput('network', width = "100%", height = "400px"), type = 6, color = "#0277bd")
-                                                        )
+                                   tabsetPanel(
+                                          tabPanel("Wordcloud", withSpinner(wordcloud2Output("wordcloud", width = "100%", height = "400px"), type = 6, color = "#0277bd")),
+                                          tabPanel("lolliplot", withSpinner(plotOutput("lolliplot", width = "100%", height = "400px"), type = 6, color = "#0277bd")),
+                                          tabPanel("PPI", withSpinner(plotOutput('network', width = "100%", height = "400px"), type = 6, color = "#0277bd")),
+                                          tabPanel("GO", withSpinner(plotOutput("godotplot", width = "100%", height = "400px"), type = 6, color = "#0277bd"))
                                           )
                                    ),
                                    # Table result
@@ -201,7 +195,7 @@ shinyUI(
 
 ###------ About  ------###
               about <- tabPanel(title = "About", value = "about", icon = icon("ghost"),
-                            br(), hr(),               
+                            br(), hr(),              
                             # Tutorial
                             titlePanel(h2("Tutorial", style = "color: #0277bd; text-align: left;")),
                             wellPanel(style = "background: #E1F5FE",

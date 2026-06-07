@@ -14,6 +14,19 @@ options(ggplot2.device = "png")
 
 ##---- Load RPIs Data ----
 load(file = "data/data.RData")
+load(file = "data/lncRNA_bed_data.RData")
+load(file = "data/protein_binding_data.RData")
+
+RNA_list <- unique(data$lncRNA_Name)
+RNA_list <- sort(RNA_list)
+RNA_list <- c("", RNA_list)
+protein_list <- unique(data$Protein_name)
+protein_list <- sort(protein_list)
+protein_list <- c("", protein_list)
+cell_list <- unique(data$Cell_Line)
+cell_list <- sort(cell_list)
+cell_list <- c("", cell_list)
+
 
 ##---- Data Preprocessing
 prepare_data_with_links <- function(df) {
@@ -65,6 +78,8 @@ prepare_data_with_links <- function(df) {
   
   df
 }
+
+
 
 generate_wordcloud <- function(data) {
   protein_freq <- as.data.frame(table(data$Protein_name))
