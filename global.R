@@ -65,3 +65,15 @@ prepare_data_with_links <- function(df) {
   
   df
 }
+
+generate_wordcloud <- function(data) {
+  protein_freq <- as.data.frame(table(data$Protein_name))
+  colnames(protein_freq) <- c("word", "freq")
+  
+  if (nrow(protein_freq) > 100) {
+    protein_freq <- protein_freq[order(-protein_freq$freq), ][1:100, ]
+  }
+  
+  wordcloud2(protein_freq, size = 0.8,
+             color = "random-light", backgroundColor = "white")
+}
