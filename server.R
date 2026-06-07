@@ -100,7 +100,7 @@ shinyServer(function(input, output, session){
                   output$network <- renderPlot({res <- analysis_result()
                                                proteins_freq <- as.data.frame(table(res$Protein_name))
                                                 colnames(proteins_freq) <- c("protein_symbol","freq")
-                                                proteins_freq <- proteins_freq[which(proteins_freq$freq > 1), ]
+                                                proteins_freq <- proteins_freq[which(proteins_freq$freq > 0), ]
                                                 proteins_freq$protein_symbol <- as.character(proteins_freq$protein_symbol)
 
                                                 g <- getPPI(proteins_freq$protein_symbol, taxID="9606")
@@ -130,7 +130,7 @@ shinyServer(function(input, output, session){
                                           pAdjustMethod = "BH",
                                           pvalueCutoff = 0.99,
                                           qvalueCutoff = 0.99)                    
-                    dotplot(go_result, showCategory = 15, 
+                    dotplot(go_result, showCategory = 10, 
                             color = "pvalue",
                             label_format = 50,
                             font.size = 11,
