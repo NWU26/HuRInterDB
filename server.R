@@ -93,11 +93,7 @@ shinyServer(function(input, output, session){
                 output$wordcloud <- renderWordcloud2({
                                     res <- analysis_result()
                                     if (is.null(res) || nrow(res) == 0) return(NULL)
-                                    
-                                    proteins <- res$Protein_name
-                                    freq_table <- head(sort(table(proteins), decreasing = TRUE), n = 20)
-                                    wordcloud2(data = data.frame(word = names(freq_table), freq = as.numeric(freq_table)),
-                                            color = "random-light", backgroundColor = "white")
+                                    generate_wordcloud(res)
                 })
                 
                 # Generate PPI from Protein_name
