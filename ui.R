@@ -78,7 +78,7 @@ shinyUI(
                                           idx <- (row - 1) * 4 + col
                                           db_list <- list(
                                           list(name = "FANTOM", url = "https://fantom.gsc.riken.jp"),
-                                          list(name = "RNAcentral", url = "https://rnacentral.org/"),
+                                          list(name = "miRBase", url = "http://mirbase.org"),
                                           list(name = "LncRNADisease", url = "http://www.rnanut.net/lncrnadisease/"),
                                           list(name = "Lnc2Cancer", url = "http://bio-bigdata.hrbmu.edu.cn/lnc2cancer/"),
                                           list(name = "Mfold", url = "http://www.unafold.org/mfold/applications/rna-folding-form.php"),
@@ -159,12 +159,15 @@ shinyUI(
                                                         withSpinner(wordcloud2Output("wordcloud",  width = "700px", height = "360px"), type = 6, color = "#0277bd")
                                                         ),
                                                  column(6, 
-                                                        withSpinner(plotOutput("godotplot", width = "100%", height = "360px"), type = 6, color = "#0277bd")
+                                                        withSpinner(plotOutput("lolliplot", width = "100%", height = "360px"), type = 6, color = "#0277bd")
                                                         )
                                           ),
                                           hr(),
-                                        fluidRow(column(10, 
-                                                        withSpinner(plotOutput('network', width = "100%", height = "400px"), type = 6, color = "#0277bd")
+                                        fluidRow(column(6, 
+                                                        withSpinner(plotOutput('network', width = "100%", height = "300px"), type = 6, color = "#0277bd")
+                                                        ),
+                                                 column(6, 
+                                                        withSpinner(plotOutput("godotplot", width = "100%", height = "300px"), type = 6, color = "#0277bd")
                                                         )
                                           )
                                    ),
