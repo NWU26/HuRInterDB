@@ -5,28 +5,15 @@ library(shinycssloaders)
 library(DT)
 library(tidyverse)
 library(wordcloud2)
-library(trackViewer)
-library(GenomicRanges)
 library(clusterProfiler)
 library(org.Hs.eg.db)
 library(ggtangle)
 library(ggplot2)
+theme_set(theme_bw(base_family = "DejaVu Sans"))
+options(ggplot2.device = "png")
 
 ##---- Load RPIs Data ----
 load(file = "data/data.RData")
-load(file = "data/lncRNA_bed_data.RData")
-load(file = "data/protein_binding_data.RData")
-
-RNA_list <- unique(data$lncRNA_Name)
-RNA_list <- sort(RNA_list)
-RNA_list <- c("", RNA_list)
-protein_list <- unique(data$Protein_name)
-protein_list <- sort(protein_list)
-protein_list <- c("", protein_list)
-cell_list <- unique(data$Cell_Line)
-cell_list <- sort(cell_list)
-cell_list <- c("", cell_list)
-
 
 ##---- Data Preprocessing
 prepare_data_with_links <- function(df) {
@@ -77,18 +64,4 @@ prepare_data_with_links <- function(df) {
   ))
   
   df
-}
-
-
-
-generate_wordcloud <- function(data) {
-  protein_freq <- as.data.frame(table(data$Protein_name))
-  colnames(protein_freq) <- c("word", "freq")
-  
-  if (nrow(protein_freq) > 100) {
-    protein_freq <- protein_freq[order(-protein_freq$freq), ][1:100, ]
-  }
-  
-  wordcloud2(protein_freq, size = 0.8,
-             color = "random-light", backgroundColor = "white")
 }

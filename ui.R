@@ -113,10 +113,10 @@ shinyUI(
               search <- tabPanel(title = "Search", value = "searchs", icon = icon("magnifying-glass"),
                             br(), hr(),
                             column(width = 10,style = "padding-top: 0px;",
-                                   column(2, selectInput(inputId = "filter_gene", label = "lncRNA", choices = RNA_list)),
-                                   column(2, selectInput(inputId = "filter_protein", label = "Protein", choices = protein_list)),
-                                   column(2, selectInput(inputId = "filter_cellline", label = "Cell Line", choices = cell_list)),
-                                   column(2, selectInput(inputId = "filter_method", label = "Method", 
+                                   column(2, textInput(inputId = "filter_gene", label = "lncRNA")),
+                                   column(2, textInput(inputId = "filter_protein", label = "Protein")),
+                                   column(2, textInput(inputId = "filter_cellline", label = "Cell Line")),
+                                   column(2, selectInput("filter_method", label = "Method", 
                                                          choices = c("","RNA Pulldown","ChIRP-MS","RAP-MS","HyPR-MS","HPLC-MS","CARPID","SILAC-MS","TREX",
                                                                       "RIP-seq","eCLIP-seq","CLIP-seq","PAR-CLIP","HITS-CLIP","LACE-seq","ARTR-seq",
                                                                       "PRIM-seq")))
@@ -159,15 +159,12 @@ shinyUI(
                                                         withSpinner(wordcloud2Output("wordcloud",  width = "700px", height = "360px"), type = 6, color = "#0277bd")
                                                         ),
                                                  column(6, 
-                                                        withSpinner(plotOutput("lolliplot", width = "100%", height = "360px"), type = 6, color = "#0277bd")
+                                                        withSpinner(plotOutput("godotplot", width = "100%", height = "360px"), type = 6, color = "#0277bd")
                                                         )
                                           ),
                                           hr(),
-                                        fluidRow(column(6, 
-                                                        withSpinner(plotOutput('network', width = "100%", height = "300px"), type = 6, color = "#0277bd")
-                                                        ),
-                                                 column(6, 
-                                                        withSpinner(plotOutput("godotplot", width = "100%", height = "300px"), type = 6, color = "#0277bd")
+                                        fluidRow(column(10, 
+                                                        withSpinner(plotOutput('network', width = "100%", height = "400px"), type = 6, color = "#0277bd")
                                                         )
                                           )
                                    ),
