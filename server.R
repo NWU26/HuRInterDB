@@ -177,7 +177,7 @@ shinyServer(function(input, output, session){
                                           qvalueCutoff = 0.99)                    
                     dotplot(go_result, showCategory = 15, 
                             color = "pvalue",
-                            label_format = 50,
+                            label_format = 80,
                             font.size = 11,
                             title = "GO Pathway Enrichment") +
                            theme(text = element_text(size = 12),
