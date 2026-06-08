@@ -18,7 +18,7 @@ shinyUI(
     ),
     ##-- Header ----
     navbarPage(title = div(img(src="img/logo.png", height = "50px"), style = "padding-left:40px;"),
-               id = "navbar", selected = "Home", theme = "styles.css", fluid = T,
+               id = "navbar", selected = "home", theme = "styles.css", fluid = T,
 ###------ Home  ------###
               home <- tabPanel(title = "Home", value = "home", icon = icon("house"),
                             br(), hr(), 
