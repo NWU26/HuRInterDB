@@ -149,7 +149,7 @@ shinyServer(function(input, output, session){
                                                 proteins_freq <- proteins_freq[which(proteins_freq$freq > 0), ]
                                                 proteins_freq$protein_symbol <- as.character(proteins_freq$protein_symbol)
 
-                                                g <- getPPI(proteins_freq$protein_symbol, taxID="9606")
+                                                g <- getPPI(proteins_freq$protein_symbol, required_score = 700, taxID="9606")
                                                 ggplot(g, layout='circular') %<+% proteins_freq + 
                                                 geom_edge() + 
                                                 geom_point(aes(color = freq), size = 8) + 
