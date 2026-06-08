@@ -75,20 +75,20 @@ a:focus, a:hover {
     margin-right: 2px;
     line-height: 1.42857143;
     border: 1px solid #ffffff;
-    background-color: #a02021b5;
+    background-color: #005EAAb5;
     color: white;
     border-radius: 4px 4px 0 0;
 }
 
 .nav-tabs>li>a:hover {
     border-color: #eee #eee #ddd;
-    background: #a0202199;
+    background: #005EAA99;
 }
 
 .nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover {
     color: #fff;
     cursor: default;
-    background-color: #a02021;
+    background-color: #005EAA;
     border: 1px solid #ddd;
     border-bottom-color: transparent;
 }
