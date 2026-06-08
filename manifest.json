@@ -5334,10 +5334,10 @@
       "checksum": "3dba1af2391594368f3b67227fb1546d"
     },
     "server.R": {
-      "checksum": "9efa285b0fc605dc8e2520d5e60df950"
+      "checksum": "f35b11c6b5bde51b8ead29f13bc1d64b"
     },
     "ui.R": {
-      "checksum": "402453bd74101b057ed18ca3730d3057"
+      "checksum": "38de10621876b773644b4c1625bd69bf"
     },
     "www/footer.html": {
       "checksum": "dd481a5ce66e7c894293b8141953a16f"
@@ -5354,11 +5354,8 @@
     "www/img/sobre.png": {
       "checksum": "48f57cffcf3b6724467c89f36d064c97"
     },
-    "www/Style.js": {
-      "checksum": "1d2f4f1c8f60ce3bceb2ddac1c0bc9ed"
-    },
     "www/styles.css": {
-      "checksum": "89bc4f46e515f10a45d4b4e244876371"
+      "checksum": "cd1fadb9c43c55d1c9ef72053a3f9c15"
     }
   },
   "users": null
