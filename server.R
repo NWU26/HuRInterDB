@@ -53,8 +53,9 @@ shinyServer(function(input, output, session){
                                                         res <- current_results()
                                                         if (is.null(res) || nrow(res) == 0) return(NULL)
                                                         
-                                                        display_df <- unique(res[, c("lncRNA_Name_link", "lncRNA_RNALocate_link", "Protein_name_link", "Protein_Domains_link", "AlphaFoldDB_link", 
-                                                                               "KEGG_link", "Cell_Line", "Method", "Data_link")])
+                                                        display_df <- unique(res[, c("lncRNA_Name_link", "lncRNA_RNALocate_link", "Protein_name_link", 
+                                                                                     "Protein_Domains_link", "AlphaFoldDB_link", 
+                                                                                     "KEGG_link", "Cell_Line", "Method", "Data_link")])
                                                         display_df <- subset(display_df, !is.na(Method))
                                                         colnames(display_df) <- c("lncRNA", "lncRNA Localization", "Protein", "Protein Domains", "Protein Structure", "Protein KEGG", "Cell Line", "Method", "Data")
                                                         datatable(display_df, escape = FALSE,
@@ -79,15 +80,24 @@ shinyServer(function(input, output, session){
             )
 
 ##---- RPI Analysis ----
-                # === Analysis Page ===
+                # === Analysis Page ===               
                 analysis_result <- eventReactive(input$analyze_btn, {
                                     rna_name <- trimws(input$lncrna_input)
+                                    cell_f <- trimws(input$cellline_input)
+                                    meth_f <- input$method_input
                                     if (rna_name == "") return(NULL)
-                                    res <- filter(data, lncRNA_Name == rna_name)
-                                    res <- res[,c("lncRNA_Name", "Protein_name", "Cell_Line", "Method", "Data")]
+                                    
+                                    df <- data
+                                    if (rna_name != "") 
+                                        df <- filter(df, lncRNA_Name == rna_name)
+                                    if (cell_f != "") 
+                                        df <- filter(df, Cell_Line == cell_f)
+                                    if (meth_f != "") 
+                                        df <- df[df$Method == meth_f, ]
+
+                                    res <- df[,c("lncRNA_Name", "Protein_name", "Cell_Line", "Method", "Data")]
                                     res
                 })
-                
 
                 # Generate wordcloud from Protein_name
                 output$wordcloud <- renderWordcloud2({
@@ -121,7 +131,7 @@ shinyServer(function(input, output, session){
                                                     geom_point(data = prot_bindings, aes(x = position, y = 1), size = 3, alpha = 0.7, fill = "#E64B35", shape = 21) +
                                                     # 蛋白名称注释
                                                     geom_text(data = prot_bindings, aes(x = position, y = 1.08, label = protein_name),
-                                                              family = "DejaVu Sans",size = 3, angle = 90, hjust = 0, color = "black") +
+                                                              family = "DejaVu Sans",size = 6, angle = 90, hjust = 0, color = "black") +
                                                     xlim(pos_min, pos_max) +
                                                     ylim(-0.2, 1.8) +
                                                     theme_void() +

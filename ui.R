@@ -13,7 +13,7 @@ shinyUI(
     list(tags$head(HTML('<link rel="icon", href="img/logo.png",type="image/png" />'))),
     div(style="padding: 1px 0px; width: '50%'",
         titlePanel(
-          title ="HuRInterDB", windowTitle = "HuRInterDB"
+          title ="", windowTitle = "HuRInterDB"
         )
     ),
     ##-- Header ----
@@ -78,7 +78,7 @@ shinyUI(
                                           idx <- (row - 1) * 4 + col
                                           db_list <- list(
                                           list(name = "FANTOM", url = "https://fantom.gsc.riken.jp"),
-                                          list(name = "miRBase", url = "http://mirbase.org"),
+                                          list(name = "RNAcentral", url = "https://rnacentral.org/"),
                                           list(name = "LncRNADisease", url = "http://www.rnanut.net/lncrnadisease/"),
                                           list(name = "Lnc2Cancer", url = "http://bio-bigdata.hrbmu.edu.cn/lnc2cancer/"),
                                           list(name = "Mfold", url = "http://www.unafold.org/mfold/applications/rna-folding-form.php"),
@@ -146,20 +146,29 @@ shinyUI(
                                    ),
                                    ##---- Head ----
                                    titlePanel(h2("🔍 On-line lncRNA-protein interaction analysis", style = "color: #0277bd; text-align: center;")),
-                                   ##---- Input ----
-                                   div(id = "inputBox", h3("📌 Input your lncRNA list:"),
-                                       textAreaInput(inputId= "lncrna_input", label = NULL, 
-                                                     width = '100%', rows = 3, resize = "horizontal"),
-                                       actionButton(inputId = "analyze_btn", label = "Continue", icon = icon("arrow-right"),class = "btn-primary btn-lg")
+                                   ##---- Input ----                                   
+                                   column(width = 10,style = "padding-top: 0px;",
+                                          column(2, selectInput(inputId = "lncrna_input", label = "lncRNA", choices = RNA_list)),
+                                          column(2, selectInput(inputId = "cellline_input", label = "Cell Line", choices = cell_list)),
+                                          column(2, selectInput(inputId = "method_input", label = "Method", 
+                                                               choices = c("","RNA Pulldown","ChIRP-MS","RAP-MS","HyPR-MS","HPLC-MS","CARPID","SILAC-MS","TREX",
+                                                                             "RIP-seq","eCLIP-seq","CLIP-seq","PAR-CLIP","HITS-CLIP","LACE-seq","ARTR-seq",
+                                                                             "PRIM-seq")))
                                    ),
+                                   column(width = 2, style = "padding-top: 55px;",
+                                          actionBttn(inputId = "analyze_btn", label = "Continue", style = "fill", 
+                                                 color = "success", icon = icon("arrow-right"), size = "sm") 
+                                   ),
+                                   
                                    ##-- Outputs ----
                                    # Fig result
+                                   column(width = 12,
                                    div(class = "resultBox", h3("📊 Interaction Analysis Results"),
                                    tabsetPanel(
-                                          tabPanel("Wordcloud", withSpinner(wordcloud2Output("wordcloud", width = "100%", height = "400px"), type = 6, color = "#0277bd")),
-                                          tabPanel("lolliplot", withSpinner(plotOutput("lolliplot", width = "100%", height = "400px"), type = 6, color = "#0277bd")),
+                                          tabPanel("Protein Wordcloud", withSpinner(wordcloud2Output("wordcloud", width = "100%", height = "400px"), type = 6, color = "#0277bd")),
+                                          tabPanel("RBP binding", withSpinner(plotOutput("lolliplot", width = "100%", height = "400px"), type = 6, color = "#0277bd")),
                                           tabPanel("PPI", withSpinner(plotOutput('network', width = "100%", height = "400px"), type = 6, color = "#0277bd")),
-                                          tabPanel("GO", withSpinner(plotOutput("godotplot", width = "100%", height = "400px"), type = 6, color = "#0277bd"))
+                                          tabPanel("GO Enrichment", withSpinner(plotOutput("godotplot", width = "100%", height = "400px"), type = 6, color = "#0277bd"))
                                           )
                                    ),
                                    # Table result
@@ -167,7 +176,7 @@ shinyUI(
                                           h3("📋 List of Interacting Proteins"),
                                           withSpinner(DT::dataTableOutput("analysis_table"), type = 6, color = "#0277bd"),
                                           downloadLink(outputId = "download_table_csv", icon = icon("download"), label = "Download (CSV)")
-                                   )
+                                   ))
               ),
               
 ###------ Download  ------###
