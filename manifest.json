@@ -150,7 +150,7 @@
         "Maintainer": "Marcel Ramos <marcel.ramos@sph.cuny.edu>",
         "Repository": "CRAN",
         "Date/Publication": "2025-11-14 08:30:02 UTC",
-        "Built": "R 4.5.2; ; 2026-01-13 15:06:06 UTC; windows",
+        "Built": "R 4.5.3; ; 2026-06-10 01:11:43 UTC; windows",
         "RemoteType": "standard",
         "RemotePkgRef": "BiocManager",
         "RemoteRef": "BiocManager",
@@ -1167,27 +1167,28 @@
       "description": {
         "Package": "callr",
         "Title": "Call R from R",
-        "Version": "3.7.6",
-        "Authors@R": "c(\n    person(\"Gábor\", \"Csárdi\", , \"csardi.gabor@gmail.com\", role = c(\"aut\", \"cre\", \"cph\"),\n           comment = c(ORCID = \"0000-0001-7098-9676\")),\n    person(\"Winston\", \"Chang\", role = \"aut\"),\n    person(\"Posit Software, PBC\", role = c(\"cph\", \"fnd\")),\n    person(\"Ascent Digital Services\", role = c(\"cph\", \"fnd\"))\n  )",
+        "Version": "3.8.0",
+        "Authors@R": "c(\n    person(\"Gábor\", \"Csárdi\", , \"csardi.gabor@gmail.com\", role = c(\"aut\", \"cre\", \"cph\"),\n           comment = c(ORCID = \"0000-0001-7098-9676\")),\n    person(\"Winston\", \"Chang\", role = \"aut\"),\n    person(\"Posit Software, PBC\", role = c(\"cph\", \"fnd\"),\n           comment = c(ROR = \"03wc8by49\")),\n    person(\"Ascent Digital Services\", role = c(\"cph\", \"fnd\"))\n  )",
         "Description": "It is sometimes useful to perform a computation in a separate\n    R process, without affecting the current R process at all.  This\n    packages does exactly that.",
         "License": "MIT + file LICENSE",
         "URL": "https://callr.r-lib.org, https://github.com/r-lib/callr",
         "BugReports": "https://github.com/r-lib/callr/issues",
         "Depends": "R (>= 3.4)",
-        "Imports": "processx (>= 3.6.1), R6, utils",
-        "Suggests": "asciicast (>= 2.3.1), cli (>= 1.1.0), mockery, ps, rprojroot,\nspelling, testthat (>= 3.2.0), withr (>= 2.3.0)",
+        "Imports": "otel (>= 0.2.0), processx (>= 3.6.1), R6, utils",
+        "Suggests": "asciicast (>= 2.3.1), carrier, cli (>= 1.1.0), otelsdk (>=\n0.2.0), ps, rprojroot, spelling, testthat (>= 3.2.0), withr (>=\n2.3.0)",
         "Config/Needs/website": "r-lib/asciicast, glue, htmlwidgets, igraph,\ntibble, tidyverse/tidytemplate",
         "Config/testthat/edition": "3",
+        "Config/usethis/last-upkeep": "2025-04-28",
         "Encoding": "UTF-8",
         "Language": "en-US",
-        "RoxygenNote": "7.3.1.9000",
+        "Config/roxygen2/version": "8.0.0",
         "NeedsCompilation": "no",
-        "Packaged": "2024-03-25 12:10:25 UTC; gaborcsardi",
-        "Author": "Gábor Csárdi [aut, cre, cph] (<https://orcid.org/0000-0001-7098-9676>),\n  Winston Chang [aut],\n  Posit Software, PBC [cph, fnd],\n  Ascent Digital Services [cph, fnd]",
+        "Packaged": "2026-06-05 08:20:00 UTC; gaborcsardi",
+        "Author": "Gábor Csárdi [aut, cre, cph] (ORCID:\n    <https://orcid.org/0000-0001-7098-9676>),\n  Winston Chang [aut],\n  Posit Software, PBC [cph, fnd] (ROR: <https://ror.org/03wc8by49>),\n  Ascent Digital Services [cph, fnd]",
         "Maintainer": "Gábor Csárdi <csardi.gabor@gmail.com>",
         "Repository": "CRAN",
-        "Date/Publication": "2024-03-25 13:30:06 UTC",
-        "Built": "R 4.4.3; ; 2025-12-15 03:11:25 UTC; windows"
+        "Date/Publication": "2026-06-05 11:40:13 UTC",
+        "Built": "R 4.5.3; ; 2026-06-10 02:30:40 UTC; windows"
       }
     },
     "cellranger": {
@@ -1223,8 +1224,8 @@
       "description": {
         "Package": "cli",
         "Title": "Helpers for Developing Command Line Interfaces",
-        "Version": "3.6.5",
-        "Authors@R": "c(\n    person(\"Gábor\", \"Csárdi\", , \"gabor@posit.co\", role = c(\"aut\", \"cre\")),\n    person(\"Hadley\", \"Wickham\", role = \"ctb\"),\n    person(\"Kirill\", \"Müller\", role = \"ctb\"),\n    person(\"Salim\", \"Brüggemann\", , \"salim-b@pm.me\", role = \"ctb\",\n           comment = c(ORCID = \"0000-0002-5329-5987\")),\n    person(\"Posit Software, PBC\", role = c(\"cph\", \"fnd\"))\n  )",
+        "Version": "3.6.6",
+        "Authors@R": "c(\n    person(\"Gábor\", \"Csárdi\", , \"gabor@posit.co\", role = c(\"aut\", \"cre\")),\n    person(\"Hadley\", \"Wickham\", role = \"ctb\"),\n    person(\"Kirill\", \"Müller\", role = \"ctb\"),\n    person(\"Salim\", \"Brüggemann\", , \"salim-b@pm.me\", role = \"ctb\",\n           comment = c(ORCID = \"0000-0002-5329-5987\")),\n    person(\"Posit Software, PBC\", role = c(\"cph\", \"fnd\"),\n           comment = c(ROR = \"03wc8by49\"))\n  )",
         "Description": "A suite of tools to build attractive command line interfaces\n    ('CLIs'), from semantic elements: headings, lists, alerts, paragraphs,\n    etc. Supports custom themes via a 'CSS'-like language. It also\n    contains a number of lower level 'CLI' elements: rules, boxes, trees,\n    and 'Unicode' symbols with 'ASCII' alternatives. It support ANSI\n    colors and text styles as well.",
         "License": "MIT + file LICENSE",
         "URL": "https://cli.r-lib.org, https://github.com/r-lib/cli",
@@ -1234,15 +1235,16 @@
         "Suggests": "callr, covr, crayon, digest, glue (>= 1.6.0), grDevices,\nhtmltools, htmlwidgets, knitr, methods, processx, ps (>=\n1.3.4.9000), rlang (>= 1.0.2.9003), rmarkdown, rprojroot,\nrstudioapi, testthat (>= 3.2.0), tibble, whoami, withr",
         "Config/Needs/website": "r-lib/asciicast, bench, brio, cpp11, decor, desc,\nfansi, prettyunits, sessioninfo, tidyverse/tidytemplate,\nusethis, vctrs",
         "Config/testthat/edition": "3",
+        "Config/usethis/last-upkeep": "2025-04-25",
         "Encoding": "UTF-8",
-        "RoxygenNote": "7.3.2",
+        "RoxygenNote": "7.3.2.9000",
         "NeedsCompilation": "yes",
-        "Packaged": "2025-04-22 12:00:18 UTC; gaborcsardi",
-        "Author": "Gábor Csárdi [aut, cre],\n  Hadley Wickham [ctb],\n  Kirill Müller [ctb],\n  Salim Brüggemann [ctb] (<https://orcid.org/0000-0002-5329-5987>),\n  Posit Software, PBC [cph, fnd]",
+        "Packaged": "2026-04-08 18:14:45 UTC; gaborcsardi",
+        "Author": "Gábor Csárdi [aut, cre],\n  Hadley Wickham [ctb],\n  Kirill Müller [ctb],\n  Salim Brüggemann [ctb] (ORCID: <https://orcid.org/0000-0002-5329-5987>),\n  Posit Software, PBC [cph, fnd] (ROR: <https://ror.org/03wc8by49>)",
         "Maintainer": "Gábor Csárdi <gabor@posit.co>",
         "Repository": "CRAN",
-        "Date/Publication": "2025-04-23 13:50:02 UTC",
-        "Built": "R 4.4.3; x86_64-w64-mingw32; 2025-10-03 00:50:50 UTC; windows",
+        "Date/Publication": "2026-04-09 09:50:18 UTC",
+        "Built": "R 4.5.3; x86_64-w64-mingw32; 2026-06-10 01:10:32 UTC; windows",
         "Archs": "x64"
       }
     },
@@ -2326,7 +2328,12 @@
         "Maintainer": "Elio Campitelli <eliocampitelli@gmail.com>",
         "Repository": "CRAN",
         "Date/Publication": "2025-06-20 04:50:02 UTC",
-        "Built": "R 4.4.3; ; 2025-12-15 04:04:30 UTC; windows"
+        "Built": "R 4.5.3; ; 2026-06-10 02:54:48 UTC; windows",
+        "RemoteType": "standard",
+        "RemotePkgRef": "ggnewscale",
+        "RemoteRef": "ggnewscale",
+        "RemoteRepos": "https://mirrors.pku.edu.cn/CRAN",
+        "RemoteSha": "0.5.2"
       }
     },
     "ggplot2": {
@@ -3389,7 +3396,7 @@
         "Package": "openssl",
         "Type": "Package",
         "Title": "Toolkit for Encryption, Signatures and Certificates Based on\nOpenSSL",
-        "Version": "2.4.1",
+        "Version": "2.4.2",
         "Authors@R": "c(person(\"Jeroen\", \"Ooms\", role = c(\"aut\", \"cre\"), email = \"jeroenooms@gmail.com\",\n    comment = c(ORCID = \"0000-0002-4035-0289\")),\n    person(\"Oliver\", \"Keyes\", role = \"ctb\"))",
         "Description": "Bindings to OpenSSL libssl and libcrypto, plus custom SSH key parsers.\n    Supports RSA, DSA and EC curves P-256, P-384, P-521, and curve25519. Cryptographic\n    signatures can either be created and verified manually or via x509 certificates. \n    AES can be used in cbc, ctr or gcm mode for symmetric encryption; RSA for asymmetric\n    (public key) encryption or EC for Diffie Hellman. High-level envelope functions \n    combine RSA and AES for encrypting arbitrary sized data. Other utilities include key\n    generators, hash functions (md5, sha1, sha256, etc), base64 encoder, a secure random\n    number generator, and 'bignum' math methods for manually performing crypto \n    calculations on large multibyte integers.",
         "License": "MIT + file LICENSE",
@@ -3399,15 +3406,15 @@
         "VignetteBuilder": "knitr",
         "Imports": "askpass",
         "Suggests": "curl, testthat (>= 2.1.0), digest, knitr, rmarkdown,\njsonlite, jose, sodium",
-        "RoxygenNote": "7.3.2",
         "Encoding": "UTF-8",
+        "Config/roxygen2/version": "8.0.0",
         "NeedsCompilation": "yes",
-        "Packaged": "2026-05-14 13:48:16 UTC; jeroen",
+        "Packaged": "2026-06-09 10:51:42 UTC; jeroen",
         "Author": "Jeroen Ooms [aut, cre] (ORCID: <https://orcid.org/0000-0002-4035-0289>),\n  Oliver Keyes [ctb]",
         "Maintainer": "Jeroen Ooms <jeroenooms@gmail.com>",
         "Repository": "CRAN",
-        "Date/Publication": "2026-05-14 14:50:14 UTC",
-        "Built": "R 4.5.3; x86_64-w64-mingw32; 2026-05-30 02:20:29 UTC; windows",
+        "Date/Publication": "2026-06-09 13:30:02 UTC",
+        "Built": "R 4.5.3; x86_64-w64-mingw32; 2026-06-09 23:51:21 UTC; windows",
         "Archs": "x64"
       }
     },
@@ -4084,7 +4091,7 @@
       "Repository": "https://mirrors.pku.edu.cn/CRAN",
       "description": {
         "Package": "rlang",
-        "Version": "1.1.7",
+        "Version": "1.2.0",
         "Title": "Functions for Base Types and Core R and 'Tidyverse' Features",
         "Description": "A toolbox for working with base types, core R features\n  like the condition system, and core 'Tidyverse' features like tidy\n  evaluation.",
         "Authors@R": "c(\n    person(\"Lionel\", \"Henry\", ,\"lionel@posit.co\", c(\"aut\", \"cre\")),\n    person(\"Hadley\", \"Wickham\", ,\"hadley@posit.co\", \"aut\"),\n    person(given = \"mikefc\",\n           email = \"mikefc@coolbutuseless.com\",\n           role = \"cph\",\n           comment = \"Hash implementation based on Mike's xxhashlite\"),\n    person(given = \"Yann\",\n           family = \"Collet\",\n           role = \"cph\",\n           comment = \"Author of the embedded xxHash library\"),\n    person(given = \"Posit, PBC\", role = c(\"cph\", \"fnd\"))\n    )",
@@ -4093,7 +4100,7 @@
         "Biarch": "true",
         "Depends": "R (>= 4.0.0)",
         "Imports": "utils",
-        "Suggests": "cli (>= 3.1.0), covr, crayon, desc, fs, glue, knitr,\nmagrittr, methods, pillar, pkgload, rmarkdown, stats, testthat\n(>= 3.2.0), tibble, usethis, vctrs (>= 0.2.3), withr",
+        "Suggests": "cli (>= 3.1.0), covr, crayon, desc, fs, glue, knitr,\nmagrittr, methods, pillar, pkgload, rmarkdown, stats, testthat\n(>= 3.3.2), tibble, usethis, vctrs (>= 0.2.3), withr",
         "Enhances": "winch",
         "Encoding": "UTF-8",
         "RoxygenNote": "7.3.3",
@@ -4103,18 +4110,13 @@
         "Config/testthat/edition": "3",
         "Config/Needs/website": "dplyr, tidyverse/tidytemplate",
         "NeedsCompilation": "yes",
-        "Packaged": "2026-01-08 10:35:58 UTC; lionel",
+        "Packaged": "2026-04-02 12:23:10 UTC; lionel",
         "Author": "Lionel Henry [aut, cre],\n  Hadley Wickham [aut],\n  mikefc [cph] (Hash implementation based on Mike's xxhashlite),\n  Yann Collet [cph] (Author of the embedded xxHash library),\n  Posit, PBC [cph, fnd]",
         "Maintainer": "Lionel Henry <lionel@posit.co>",
         "Repository": "CRAN",
-        "Date/Publication": "2026-01-09 12:10:02 UTC",
-        "Built": "R 4.5.2; x86_64-w64-mingw32; 2026-01-12 08:05:12 UTC; windows",
-        "Archs": "x64",
-        "RemoteType": "standard",
-        "RemotePkgRef": "rlang",
-        "RemoteRef": "rlang",
-        "RemoteRepos": "https://mirrors.pku.edu.cn/CRAN",
-        "RemoteSha": "1.1.7"
+        "Date/Publication": "2026-04-06 10:40:02 UTC",
+        "Built": "R 4.5.3; x86_64-w64-mingw32; 2026-06-10 01:10:33 UTC; windows",
+        "Archs": "x64"
       }
     },
     "rmarkdown": {
@@ -5118,6 +5120,38 @@
         "Archs": "x64"
       }
     },
+    "waiter": {
+      "Source": "CRAN",
+      "Repository": "https://mirrors.pku.edu.cn/CRAN",
+      "description": {
+        "Package": "waiter",
+        "Title": "Loading Screen for 'Shiny'",
+        "Version": "0.2.5.1",
+        "Date": "2022-01-02",
+        "Authors@R": "c(\n    person(given = \"John\",\n           family = \"Coene\",\n           role = c(\"aut\", \"cre\"),\n           email = \"jcoenep@gmail.com\"),\n    person(given = \"Jinhwan\",\n           family = \"Kim\",\n           role = \"ctb\",\n           email = 'hwanistic@gmail.com'),\n    person(given = \"Victor\",\n           family = \"Granda\",\n           role = c(\"ctb\"),\n           email = \"victorgrandagarcia@gmail.com\",\n           comment = c(ORCID = \"0000-0002-0469-1991\")))",
+        "Description": "Full screen and partial loading screens for 'Shiny' with spinners, progress bars, and notifications.",
+        "License": "MIT + file LICENSE",
+        "URL": "https://waiter.john-coene.com/,\nhttps://github.com/JohnCoene/waiter",
+        "BugReports": "https://github.com/JohnCoene/waiter/issues",
+        "Encoding": "UTF-8",
+        "Imports": "R6, shiny, htmltools",
+        "RoxygenNote": "7.3.3",
+        "Suggests": "httr, knitr, packer, rmarkdown",
+        "VignetteBuilder": "knitr",
+        "NeedsCompilation": "no",
+        "Packaged": "2025-09-23 11:45:51 UTC; hornik",
+        "Author": "John Coene [aut, cre],\n  Jinhwan Kim [ctb],\n  Victor Granda [ctb] (ORCID: <https://orcid.org/0000-0002-0469-1991>)",
+        "Maintainer": "John Coene <jcoenep@gmail.com>",
+        "Repository": "CRAN",
+        "Date/Publication": "2025-09-23 12:02:29 UTC",
+        "Built": "R 4.5.3; ; 2026-06-10 03:49:09 UTC; windows",
+        "RemoteType": "standard",
+        "RemotePkgRef": "waiter",
+        "RemoteRef": "waiter",
+        "RemoteRepos": "https://mirrors.pku.edu.cn/CRAN",
+        "RemoteSha": "0.2.5.1"
+      }
+    },
     "withr": {
       "Source": "CRAN",
       "Repository": "https://mirrors.pku.edu.cn/CRAN",
@@ -5321,6 +5355,9 @@
     }
   },
   "files": {
+    "APP.R": {
+      "checksum": "c32e93a4c36b0652af4548766a899898"
+    },
     "data/data.RData": {
       "checksum": "a56ac6238fcc63eb018222d562995e83"
     },
@@ -5330,17 +5367,8 @@
     "data/protein_binding_data.RData": {
       "checksum": "a2308e4ef24ac1cc854f7b132ce245c4"
     },
-    "global.R": {
-      "checksum": "3dba1af2391594368f3b67227fb1546d"
-    },
-    "server.R": {
-      "checksum": "f35b11c6b5bde51b8ead29f13bc1d64b"
-    },
-    "ui.R": {
-      "checksum": "38de10621876b773644b4c1625bd69bf"
-    },
     "www/footer.html": {
-      "checksum": "dd481a5ce66e7c894293b8141953a16f"
+      "checksum": "034183de89d044cd831c2bbbc9bfba52"
     },
     "www/img/github-icon-mini.png": {
       "checksum": "21520221a5b7e8928f4c58611cbafce0"
@@ -5353,6 +5381,9 @@
     },
     "www/img/sobre.png": {
       "checksum": "48f57cffcf3b6724467c89f36d064c97"
+    },
+    "www/Style.js": {
+      "checksum": "1d2f4f1c8f60ce3bceb2ddac1c0bc9ed"
     },
     "www/styles.css": {
       "checksum": "cd1fadb9c43c55d1c9ef72053a3f9c15"
