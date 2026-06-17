@@ -32,6 +32,7 @@ cell_list <- sort(cell_list)
 cell_list <- c("", cell_list)
 
 
+
 ##---- Data Preprocessing ----
 prepare_data_with_links <- function(df) {
   if (!"Entry" %in% colnames(df)) df$Entry <- ""
@@ -71,22 +72,35 @@ prepare_data_with_links <- function(df) {
     ""
   ))
   
-  df$Data_link <- with(df, ifelse(
-    Data != "" & grepl("^GSE", Data),
-    sprintf('<a href="https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=%s" target="_blank">%s</a>', Data, Data),
-    ifelse(
-      Data != "" & grepl("^ENCSR", Data),
-      sprintf('<a href="https://www.encodeproject.org/%s/" target="_blank">%s</a>', Data, Data),
-      ifelse(
-        Data != "" & grepl("^[0-9]+$", Data),
-        sprintf('<a href="https://pubmed.ncbi.nlm.nih.gov/%s/" target="_blank">%s</a>', Data, Data),
-        ""
-      )
-    )
-  ))
+  generate_single_link <- function(data_id) {
+    if (data_id == "" || is.na(data_id)) return("")
+    
+    if (grepl("^GSE", data_id)) {
+      return(sprintf('<a href="https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=%s" target="_blank">%s</a>', data_id, data_id))
+    } else if (grepl("^ENCSR", data_id)) {
+      return(sprintf('<a href="https://www.encodeproject.org/%s/" target="_blank">%s</a>', data_id, data_id))
+    } else if (grepl("^[0-9]+$", data_id)) {
+      return(sprintf('<a href="https://pubmed.ncbi.nlm.nih.gov/%s/" target="_blank">%s</a>', data_id, data_id))
+    } else {
+      return(data_id) 
+    }
+  }
+  
+  df$Data_link <- sapply(df$Data, function(x) {
+    if (x == "" || is.na(x)) return("")
+    
+    if (grepl(",", x)) {
+      data_items <- trimws(unlist(strsplit(x, ",")))
+      links <- sapply(data_items, generate_single_link)
+      return(paste(links, collapse = ", "))
+    } else {
+      return(generate_single_link(x))
+    }
+  })
   
   df
 }
+
 
 generate_wordcloud <- function(data) {
   protein_freq <- as.data.frame(table(data$Protein_name))
@@ -488,6 +502,7 @@ server <- shinyServer(function(input, output, session){
                 Cell_Line = character(),
                 Method = character(),
                 Data = character(),
+                Score = numeric(),
                 Entry = character(),
                 KEGG = character()
             )
@@ -560,8 +575,8 @@ server <- shinyServer(function(input, output, session){
         }
         
         required_cols <- c("lncRNA_Name_link", "lncRNA_RNALocate_link", "Protein_name_link", 
-                           "Protein_Domains_link", "AlphaFoldDB_link", 
-                           "KEGG_link", "Cell_Line", "Method", "Data_link")
+                        "Protein_Domains_link", "AlphaFoldDB_link", 
+                        "KEGG_link", "Cell_Line", "Method", "Score", "Data_link")
         
         existing_cols <- required_cols[required_cols %in% colnames(res)]
         
@@ -575,17 +590,20 @@ server <- shinyServer(function(input, output, session){
         if(nrow(display_df) == 0) {
             return(datatable(data.frame(NOTE = "No matching data found."), rownames = FALSE))
         }
+
+        if ("Score" %in% colnames(display_df)) {
+            display_df$Score <- round(display_df$Score, 2)
+        }
         
         col_names <- c("lncRNA", "lncRNA Localization", "Protein", "Protein Domains", 
-                       "Protein Structure", "Protein KEGG", "Cell Line", "Method", "Data")
-        colnames(display_df) <- col_names[1:ncol(display_df)]
-        
+                    "Protein Structure", "Protein KEGG", "Cell Line", "Method", "Score", "Data")
+
         datatable(display_df, escape = FALSE,
-                  options = list(pageLength = 10, lengthMenu = c(10, 25, 50)),
-                  rownames = FALSE, filter = "top"
+                options = list(pageLength = 10, lengthMenu = c(10, 25, 50)),
+                rownames = FALSE, filter = "top"
         )
     })
-
+    
     # Download filtered data
     output$download_data <- downloadHandler(
         filename = function() "search_results.csv",
@@ -615,6 +633,14 @@ server <- shinyServer(function(input, output, session){
     })
     outputOptions(output, "protein_network_visible", suspendWhenHidden = FALSE)
     
+    # 网络统计信息
+    network_stats <- reactiveValues(
+        original_count = 0,
+        displayed_count = 0,
+        sampled = FALSE,
+        protein_name = ""
+    )
+
     # 生成蛋白质关联的 lncRNA 网络图
     protein_lncRNA_network <- reactive({
         req(selected_protein_network())
@@ -724,15 +750,7 @@ server <- shinyServer(function(input, output, session){
         
         return(p)
     })
-    
-    # 网络统计信息
-    network_stats <- reactiveValues(
-        original_count = 0,
-        displayed_count = 0,
-        sampled = FALSE,
-        protein_name = ""
-    )
-        
+            
     # 渲染网络图
     output$protein_lncRNA_network <- renderPlot({
         req(protein_lncRNA_network())
