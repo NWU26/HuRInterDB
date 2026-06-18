@@ -31,8 +31,6 @@ cell_list <- unique(data$Cell_Line)
 cell_list <- sort(cell_list)
 cell_list <- c("", cell_list)
 
-
-
 ##---- Data Preprocessing ----
 prepare_data_with_links <- function(df) {
   if (!"Entry" %in% colnames(df)) df$Entry <- ""
@@ -49,14 +47,7 @@ prepare_data_with_links <- function(df) {
       lncRNA_Name),
     ""
   ))
-  
-  df$Protein_name_link <- with(df, ifelse(Entry != "", 
-    sprintf('<a href="#" class="protein-network-link" data-protein="%s" style="color: #0066cc; text-decoration: underline; cursor: pointer;">%s</a>',
-            Protein_name, Protein_name),
-    sprintf('<a href="#" class="protein-network-link" data-protein="%s" style="color: #0066cc; text-decoration: underline; cursor: pointer;">%s</a>',
-            Protein_name, Protein_name)
-  ))
-  
+
   df$Protein_Domains_link <- with(df, ifelse(Entry != "", 
     sprintf('<a href="https://www.ebi.ac.uk/interpro/protein/UniProt/%s" target="_blank">View</a>', Entry),
     ""
@@ -574,9 +565,9 @@ server <- shinyServer(function(input, output, session){
             )
         }
         
-        required_cols <- c("lncRNA_Name_link", "lncRNA_RNALocate_link", "Protein_name_link", 
-                        "Protein_Domains_link", "AlphaFoldDB_link", 
-                        "KEGG_link", "Cell_Line", "Method", "Score", "Data_link")
+        required_cols <- c("lncRNA_Name_link", "lncRNA_RNALocate_link", "Protein_name", 
+                           "Protein_Domains_link", "AlphaFoldDB_link", 
+                           "KEGG_link", "Cell_Line", "Method", "Score", "Data_link")
         
         existing_cols <- required_cols[required_cols %in% colnames(res)]
         
@@ -595,8 +586,8 @@ server <- shinyServer(function(input, output, session){
             display_df$Score <- round(display_df$Score, 2)
         }
         
-        col_names <- c("lncRNA", "lncRNA Localization", "Protein", "Protein Domains", 
-                    "Protein Structure", "Protein KEGG", "Cell Line", "Method", "Score", "Data")
+        colnames(display_df) <- c("lncRNA", "lncRNA Localization", "Protein", "Protein Domains", 
+                                  "Protein Structure", "Protein KEGG", "Cell Line", "Method", "Score", "Data")
 
         datatable(display_df, escape = FALSE,
                 options = list(pageLength = 10, lengthMenu = c(10, 25, 50)),
