@@ -2,6 +2,7 @@
   "version": 1,
   "locale": "zh_CN",
   "platform": "4.5.2",
+   "min_processes": 1,
   "metadata": {
     "appmode": "shiny",
     "primary_rmd": null,
