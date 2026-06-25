@@ -17,9 +17,9 @@ theme_set(theme_bw(base_family = "DejaVu Sans"))
 options(ggplot2.device = "png")
 
 ##---- Load RPIs Data ----
-load(file = "data/data.RData")
-load(file = "data/lncRNA_bed_data.RData")
-load(file = "data/protein_binding_data.RData")
+data <- readRDS(file = "data/data.rds")
+lncRNA_bed_data <- readRDS(file = "data/lncRNA_bed_data.rds")
+protein_binding_data <- readRDS(file = "data/protein_binding_data.rds")
 
 RNA_list <- unique(data$lncRNA_Name)
 RNA_list <- sort(RNA_list)
