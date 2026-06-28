@@ -21,6 +21,7 @@ data <- readRDS(file = "data/data.rds")
 lncRNA_bed_data <- readRDS(file = "data/lncRNA_bed_data.rds")
 protein_binding_data <- readRDS(file = "data/protein_binding_data.rds")
 
+
 RNA_list <- unique(data$lncRNA_Name)
 RNA_list <- sort(RNA_list)
 RNA_list <- c("", RNA_list)
@@ -30,6 +31,8 @@ protein_list <- c("", protein_list)
 cell_list <- unique(data$Cell_Line)
 cell_list <- sort(cell_list)
 cell_list <- c("", cell_list)
+
+
 
 ##---- Data Preprocessing ----
 prepare_data_with_links <- function(df) {
@@ -47,7 +50,14 @@ prepare_data_with_links <- function(df) {
       lncRNA_Name),
     ""
   ))
-
+  
+  df$Protein_name_link <- with(df, ifelse(Entry != "", 
+    sprintf('<a href="#" class="protein-network-link" data-protein="%s" style="color: #0066cc; text-decoration: underline; cursor: pointer;">%s</a>',
+            Protein_name, Protein_name),
+    sprintf('<a href="#" class="protein-network-link" data-protein="%s" style="color: #0066cc; text-decoration: underline; cursor: pointer;">%s</a>',
+            Protein_name, Protein_name)
+  ))
+  
   df$Protein_Domains_link <- with(df, ifelse(Entry != "", 
     sprintf('<a href="https://www.ebi.ac.uk/interpro/protein/UniProt/%s" target="_blank">View</a>', Entry),
     ""
@@ -185,15 +195,15 @@ ui <- shinyUI(
                      fluidRow(
                        column(4, div(class = "stat-card",
                                      tags$i(class = "fas fa-dna fa-2x", style = "margin-bottom: 1px;"),
-                                     h2("55,925 lncRNA", style = "margin: 0; font-size: 24px;"))
+                                     h2("55925 lncRNA", style = "margin: 0; font-size: 24px;"))
                        ),
                        column(4, div(class = "stat-card",
                                      tags$i(class = "fas fa-project-diagram fa-2x", style = "margin-bottom: 1px;"),
-                                     h2("7,864 Protein", style = "margin: 0; font-size: 24px;"))
+                                     h2("7864 Protein", style = "margin: 0; font-size: 24px;"))
                        ),
                        column(4, div(class = "stat-card",
                                      tags$i(class = "fas fa-atom fa-2x", style = "margin-bottom: 1px;"),
-                                     h2("2,159,916 Interaction", style = "margin: 0; font-size: 24px;"))
+                                     h2("2195828 Interaction", style = "margin: 0; font-size: 24px;"))
                        )
                      ),
                      ## ----  Resources  ----   
@@ -565,9 +575,9 @@ server <- shinyServer(function(input, output, session){
             )
         }
         
-        required_cols <- c("lncRNA_Name_link", "lncRNA_RNALocate_link", "Protein_name", 
-                           "Protein_Domains_link", "AlphaFoldDB_link", 
-                           "KEGG_link", "Cell_Line", "Method", "Score", "Data_link")
+        required_cols <- c("lncRNA_Name_link", "lncRNA_RNALocate_link", "Protein_name_link", 
+                        "Protein_Domains_link", "AlphaFoldDB_link", 
+                        "KEGG_link", "Cell_Line", "Method", "Score", "Data_link")
         
         existing_cols <- required_cols[required_cols %in% colnames(res)]
         
@@ -586,8 +596,8 @@ server <- shinyServer(function(input, output, session){
             display_df$Score <- round(display_df$Score, 2)
         }
         
-        colnames(display_df) <- c("lncRNA", "lncRNA Localization", "Protein", "Protein Domains", 
-                                  "Protein Structure", "Protein KEGG", "Cell Line", "Method", "Score", "Data")
+        col_names <- c("lncRNA", "lncRNA Localization", "Protein", "Protein Domains", 
+                    "Protein Structure", "Protein KEGG", "Cell Line", "Method", "Score", "Data")
 
         datatable(display_df, escape = FALSE,
                 options = list(pageLength = 10, lengthMenu = c(10, 25, 50)),
@@ -763,6 +773,33 @@ server <- shinyServer(function(input, output, session){
 
 
 ##---- RPI Analysis ----
+    # Generate lolliplot
+    protein_binding_data <- reactive({
+        req(input$navbar == "RPIanalysis")
+        
+        if (!exists("cached_protein_binding_data", envir = .GlobalEnv)) {
+        withProgress(message = 'Loading data...', value = 0, {
+            incProgress(0.3, detail = "Loading data...")
+            
+            if (file.exists("data/protein_binding_data.rds")) {
+            data <- readRDS("data/protein_binding_data.rds")
+            } else if (file.exists("data/protein_binding_data.RData")) {
+            load("data/protein_binding_data.RData")
+            data <- protein_binding_data
+            } else {
+            data <- data.frame()
+            showNotification("The data file does not exist.", type = "warning")
+            }
+            
+            incProgress(0.7, detail = "Completed")
+            assign("cached_protein_binding_data", data, envir = .GlobalEnv)
+            data
+        })
+        } else {
+        get("cached_protein_binding_data", envir = .GlobalEnv)
+        }
+    })
+
     analysis_result <- eventReactive(input$analyze_btn, {
         tryCatch({
             rna_name <- trimws(input$lncrna_input)
@@ -846,6 +883,7 @@ server <- shinyServer(function(input, output, session){
             pos_min <- min(lncRNA_info$start)
             pos_max <- max(lncRNA_info$end)
             
+            protein_binding_data <- protein_binding_data()
             prot_bindings <- protein_binding_data %>%
                 filter(chr == chr_target, between(position, pos_min, pos_max))
             
@@ -901,7 +939,7 @@ server <- shinyServer(function(input, output, session){
         }
     )
 
-    # Generate lolliplot
+
     RBP_plot <- reactive({
         req(input$lncrna_input)
         req(analysis_result())
@@ -913,7 +951,7 @@ server <- shinyServer(function(input, output, session){
                             label = "Non-interacting RBP.", size = 6, color = "red") +
                    theme_void())
         }
-        
+
         prot_bindings <- analysis_result()$prot_bindings
         exons <- analysis_result()$exons
         pos_min <- analysis_result()$pos_min
@@ -1176,6 +1214,7 @@ server <- shinyServer(function(input, output, session){
             paste0(input$lncrna_input, "_RBP_binding_data.csv")
         },
         content = function(file) {
+
             prot_bindings <- analysis_result()$prot_bindings
             if(!is.null(prot_bindings) && nrow(prot_bindings) > 0) {
                 write.csv(prot_bindings, file, row.names = FALSE)
