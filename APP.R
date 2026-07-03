@@ -510,10 +510,10 @@ server <- shinyServer(function(input, output, session){
       geom_point(data=coords,aes(x=x,y,color=color,size=size),alpha=0.9) +
       geom_text(data=coords,aes(x=x,y,label=name), family = "DejaVu Sans",vjust=-0.8,size=3.5) +
       scale_color_identity() + scale_size_identity() + theme_void() +
-      labs(title=paste("Interaction Network of",pn))
-           
+      labs(title=paste("Interaction Network of",pn)) +
+      theme(plot.title = element_text(family = "DejaVu Sans"))
   })
-    
+
   output$protein_lncRNA_network <- renderPlot(protein_lncRNA_network())
   output$download_protein_network <- downloadHandler(
     paste0("network_",selected_protein_network(),".png"),
