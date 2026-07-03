@@ -2,7 +2,6 @@
   "version": 1,
   "locale": "zh_CN",
   "platform": "4.5.2",
-   "min_processes": 1,
   "metadata": {
     "appmode": "shiny",
     "primary_rmd": null,
@@ -285,7 +284,12 @@
         "Maintainer": "Kirill Müller <kirill@cynkra.com>",
         "Repository": "CRAN",
         "Date/Publication": "2026-02-25 06:31:27 UTC",
-        "Built": "R 4.5.3; ; 2026-05-30 01:02:52 UTC; windows"
+        "Built": "R 4.5.3; ; 2026-06-27 01:21:48 UTC; windows",
+        "RemoteType": "standard",
+        "RemotePkgRef": "DBI",
+        "RemoteRef": "DBI",
+        "RemoteRepos": "https://mirrors.pku.edu.cn/CRAN",
+        "RemoteSha": "1.3.0"
       }
     },
     "DOSE": {
@@ -661,16 +665,16 @@
       "description": {
         "Package": "RSQLite",
         "Title": "SQLite Interface for R",
-        "Version": "3.53.1",
-        "Date": "2026-05-22",
+        "Version": "3.53.2",
+        "Date": "2026-06-12",
         "Authors@R": "c(\n    person(\"Kirill\", \"Müller\", , \"kirill@cynkra.com\", role = c(\"aut\", \"cre\"),\n           comment = c(ORCID = \"0000-0002-1416-3412\")),\n    person(\"Hadley\", \"Wickham\", role = \"aut\"),\n    person(c(\"David\", \"A.\"), \"James\", role = \"aut\"),\n    person(\"Seth\", \"Falcon\", role = \"aut\"),\n    person(\"D. Richard\", \"Hipp\", role = \"ctb\",\n           comment = \"for the included SQLite sources\"),\n    person(\"Dan\", \"Kennedy\", role = \"ctb\",\n           comment = \"for the included SQLite sources\"),\n    person(\"Joe\", \"Mistachkin\", role = \"ctb\",\n           comment = \"for the included SQLite sources\"),\n    person(, \"SQLite Authors\", role = \"ctb\",\n           comment = \"for the included SQLite sources\"),\n    person(\"Liam\", \"Healy\", role = \"ctb\",\n           comment = \"for the included SQLite sources\"),\n    person(\"R Consortium\", role = \"fnd\"),\n    person(, \"RStudio\", role = \"cph\")\n  )",
-        "Description": "Embeds the SQLite database engine in R and provides an\n    interface compliant with the DBI package. The source for the SQLite\n    engine and for various extensions is included.\n    System libraries will never be consulted because this package relies\n    on static linking for the plugins it includes; this also ensures a\n    consistent experience across all installations.",
+        "Description": "Embeds the SQLite database engine in R and provides an\n    interface compliant with the DBI package. The source for the SQLite\n    engine and for various extensions is included.\n    System libraries will never be consulted because this package relies\n    on static linking for the plugins it includes; this also ensures a\n    consistent experience across all installations. Optionally, when\n    libcurl is available at build time, an experimental HTTP/HTTPS\n    virtual file system (VFS) can be enabled to allow read-only access\n    to remote immutable SQLite database files via URIs.",
         "License": "LGPL (>= 2.1)",
         "URL": "https://rsqlite.r-dbi.org, https://github.com/r-dbi/RSQLite",
         "BugReports": "https://github.com/r-dbi/RSQLite/issues",
         "Depends": "R (>= 3.1.0)",
         "Imports": "bit64, blob (>= 1.2.0), DBI (>= 1.2.0), memoise, methods,\npkgconfig, rlang",
-        "Suggests": "callr, cli, DBItest (>= 1.8.0), decor, gert, gh, hms, knitr,\nmagrittr, rmarkdown, rvest, testthat (>= 3.0.0), withr, xml2",
+        "Suggests": "callr, cli, DBItest (>= 1.8.0), decor, gert, gh, hms, httpuv,\nknitr, magrittr, rmarkdown, rvest, testthat (>= 3.0.0), withr,\nxml2",
         "LinkingTo": "cpp11 (>= 0.4.0)",
         "VignetteBuilder": "knitr",
         "Config/Needs/website": "r-dbi/dbitemplate",
@@ -678,16 +682,21 @@
         "Config/autostyle/strict": "false",
         "Config/testthat/edition": "3",
         "Encoding": "UTF-8",
-        "Collate": "'SQLiteConnection.R' 'SQLKeywords_SQLiteConnection.R'\n'SQLiteDriver.R' 'SQLite.R' 'SQLiteResult.R' 'coerce.R'\n'compatRowNames.R' 'copy.R' 'cpp11.R' 'datasetsDb.R'\n'dbAppendTable_SQLiteConnection.R' 'dbBeginTransaction.R'\n'dbBegin_SQLiteConnection.R' 'dbBind_SQLiteResult.R'\n'dbClearResult_SQLiteResult.R' 'dbColumnInfo_SQLiteResult.R'\n'dbCommit_SQLiteConnection.R' 'dbConnect_SQLiteConnection.R'\n'dbConnect_SQLiteDriver.R' 'dbDataType_SQLiteConnection.R'\n'dbDataType_SQLiteDriver.R' 'dbDisconnect_SQLiteConnection.R'\n'dbExistsTable_SQLiteConnection_Id.R'\n'dbExistsTable_SQLiteConnection_character.R'\n'dbFetch_SQLiteResult.R' 'dbGetException_SQLiteConnection.R'\n'dbGetInfo_SQLiteConnection.R' 'dbGetInfo_SQLiteDriver.R'\n'dbGetPreparedQuery.R'\n'dbGetPreparedQuery_SQLiteConnection_character_data.frame.R'\n'dbGetRowCount_SQLiteResult.R'\n'dbGetRowsAffected_SQLiteResult.R'\n'dbGetStatement_SQLiteResult.R' 'dbHasCompleted_SQLiteResult.R'\n'dbIsValid_SQLiteConnection.R' 'dbIsValid_SQLiteDriver.R'\n'dbIsValid_SQLiteResult.R' 'dbListObjects_SQLiteConnection.R'\n'dbListResults_SQLiteConnection.R'\n'dbListTables_SQLiteConnection.R'\n'dbQuoteIdentifier_SQLiteConnection_SQL.R'\n'dbQuoteIdentifier_SQLiteConnection_character.R'\n'dbReadTable_SQLiteConnection_character.R'\n'dbRemoveTable_SQLiteConnection_character.R'\n'dbRollback_SQLiteConnection.R' 'dbSendPreparedQuery.R'\n'dbSendPreparedQuery_SQLiteConnection_character_data.frame.R'\n'dbSendQuery_SQLiteConnection_character.R'\n'dbUnloadDriver_SQLiteDriver.R'\n'dbUnquoteIdentifier_SQLiteConnection_SQL.R'\n'dbWriteTable_SQLiteConnection_character_character.R'\n'dbWriteTable_SQLiteConnection_character_data.frame.R'\n'db_bind.R' 'deprecated.R' 'export.R' 'fetch_SQLiteResult.R'\n'import-standalone-check_suggested.R'\n'import-standalone-purrr.R' 'initExtension.R' 'initRegExp.R'\n'isSQLKeyword_SQLiteConnection_character.R'\n'make.db.names_SQLiteConnection_character.R' 'pkgconfig.R'\n'show_SQLiteConnection.R' 'sqlData_SQLiteConnection.R'\n'table.R' 'transactions.R' 'utils.R' 'version.R' 'zzz.R'",
+        "Collate": "'SQLiteConnection.R' 'SQLKeywords_SQLiteConnection.R'\n'SQLiteDriver.R' 'SQLite.R' 'SQLiteResult.R' 'coerce.R'\n'compatRowNames.R' 'copy.R' 'cpp11.R' 'datasetsDb.R'\n'dbAppendTable_SQLiteConnection.R' 'dbBeginTransaction.R'\n'dbBegin_SQLiteConnection.R' 'dbBind_SQLiteResult.R'\n'dbClearResult_SQLiteResult.R' 'dbColumnInfo_SQLiteResult.R'\n'dbCommit_SQLiteConnection.R' 'dbConnect_SQLiteConnection.R'\n'dbConnect_SQLiteDriver.R' 'dbDataType_SQLiteConnection.R'\n'dbDataType_SQLiteDriver.R' 'dbDisconnect_SQLiteConnection.R'\n'dbExistsTable_SQLiteConnection_Id.R'\n'dbExistsTable_SQLiteConnection_character.R'\n'dbFetch_SQLiteResult.R' 'dbGetException_SQLiteConnection.R'\n'dbGetInfo_SQLiteConnection.R' 'dbGetInfo_SQLiteDriver.R'\n'dbGetPreparedQuery.R'\n'dbGetPreparedQuery_SQLiteConnection_character_data.frame.R'\n'dbGetRowCount_SQLiteResult.R'\n'dbGetRowsAffected_SQLiteResult.R'\n'dbGetStatement_SQLiteResult.R' 'dbHasCompleted_SQLiteResult.R'\n'dbIsValid_SQLiteConnection.R' 'dbIsValid_SQLiteDriver.R'\n'dbIsValid_SQLiteResult.R' 'dbListObjects_SQLiteConnection.R'\n'dbListResults_SQLiteConnection.R'\n'dbListTables_SQLiteConnection.R'\n'dbQuoteIdentifier_SQLiteConnection_SQL.R'\n'dbQuoteIdentifier_SQLiteConnection_character.R'\n'dbReadTable_SQLiteConnection_character.R'\n'dbRemoveTable_SQLiteConnection_character.R'\n'dbRollback_SQLiteConnection.R' 'dbSendPreparedQuery.R'\n'dbSendPreparedQuery_SQLiteConnection_character_data.frame.R'\n'dbSendQuery_SQLiteConnection_character.R'\n'dbUnloadDriver_SQLiteDriver.R'\n'dbUnquoteIdentifier_SQLiteConnection_SQL.R'\n'dbWriteTable_SQLiteConnection_character_character.R'\n'dbWriteTable_SQLiteConnection_character_data.frame.R'\n'db_bind.R' 'deprecated.R' 'export.R' 'fetch_SQLiteResult.R'\n'httpvfs.R' 'httpvfs_config.R'\n'import-standalone-check_suggested.R'\n'import-standalone-purrr.R' 'initExtension.R' 'initRegExp.R'\n'isSQLKeyword_SQLiteConnection_character.R'\n'make.db.names_SQLiteConnection_character.R' 'pkgconfig.R'\n'show_SQLiteConnection.R' 'sqlData_SQLiteConnection.R'\n'table.R' 'transactions.R' 'utils.R' 'version.R' 'zzz.R'",
         "Config/roxygen2/version": "8.0.0.9000",
         "NeedsCompilation": "yes",
-        "Packaged": "2026-05-22 15:59:59 UTC; kirill",
+        "Packaged": "2026-06-17 07:44:15 UTC; kirill",
         "Author": "Kirill Müller [aut, cre] (ORCID:\n    <https://orcid.org/0000-0002-1416-3412>),\n  Hadley Wickham [aut],\n  David A. James [aut],\n  Seth Falcon [aut],\n  D. Richard Hipp [ctb] (for the included SQLite sources),\n  Dan Kennedy [ctb] (for the included SQLite sources),\n  Joe Mistachkin [ctb] (for the included SQLite sources),\n  SQLite Authors [ctb] (for the included SQLite sources),\n  Liam Healy [ctb] (for the included SQLite sources),\n  R Consortium [fnd],\n  RStudio [cph]",
         "Maintainer": "Kirill Müller <kirill@cynkra.com>",
         "Repository": "CRAN",
-        "Date/Publication": "2026-05-23 05:10:57 UTC",
-        "Built": "R 4.5.3; x86_64-w64-mingw32; 2026-05-30 02:47:59 UTC; windows",
-        "Archs": "x64"
+        "Date/Publication": "2026-06-17 09:10:09 UTC",
+        "Built": "R 4.5.3; x86_64-w64-mingw32; 2026-06-27 03:41:22 UTC; windows",
+        "Archs": "x64",
+        "RemoteType": "standard",
+        "RemotePkgRef": "RSQLite",
+        "RemoteRef": "RSQLite",
+        "RemoteRepos": "https://mirrors.pku.edu.cn/CRAN",
+        "RemoteSha": "3.53.2"
       }
     },
     "Rcpp": {
@@ -900,6 +909,45 @@
         "Built": "R 4.4.3; ; 2025-12-15 04:31:18 UTC; windows"
       }
     },
+    "arrow": {
+      "Source": "CRAN",
+      "Repository": "https://mirrors.pku.edu.cn/CRAN",
+      "description": {
+        "Package": "arrow",
+        "Title": "Integration to 'Apache' 'Arrow'",
+        "Version": "24.0.0",
+        "Authors@R": "c(\n    person(\"Neal\", \"Richardson\", email = \"neal.p.richardson@gmail.com\", role = c(\"aut\")),\n    person(\"Ian\", \"Cook\", email = \"ianmcook@gmail.com\", role = c(\"aut\")),\n    person(\"Nic\", \"Crane\", email = \"thisisnic@gmail.com\", role = c(\"aut\")),\n    person(\"Dewey\", \"Dunnington\", role = c(\"aut\"), email = \"dewey@fishandwhistle.net\", comment = c(ORCID = \"0000-0002-9415-4582\")),\n    person(\"Romain\", \"Fran\\u00e7ois\", role = c(\"aut\"), comment = c(ORCID = \"0000-0002-2444-4226\")),\n    person(\"Jonathan\", \"Keane\", email = \"jkeane@gmail.com\", role = c(\"aut\", \"cre\")),\n    person(\"Bryce\", \"Mecum\", email = \"brycemecum@gmail.com\", role = c(\"aut\")),\n    person(\"Drago\\u0219\", \"Moldovan-Gr\\u00fcnfeld\", email = \"dragos.mold@gmail.com\", role = c(\"aut\")),\n    person(\"Jeroen\", \"Ooms\", email = \"jeroen@berkeley.edu\", role = c(\"aut\")),\n    person(\"Jacob\", \"Wujciak-Jens\", email = \"jacob@wujciak.de\", role = c(\"aut\")),\n    person(\"Javier\", \"Luraschi\", email = \"javier@rstudio.com\", role = c(\"ctb\")),\n    person(\"Karl\", \"Dunkle Werner\", email = \"karldw@users.noreply.github.com\", role = c(\"ctb\"), comment = c(ORCID = \"0000-0003-0523-7309\")),\n    person(\"Jeffrey\", \"Wong\", email = \"jeffreyw@netflix.com\", role = c(\"ctb\")),\n    person(\"Apache Arrow\", email = \"dev@arrow.apache.org\", role = c(\"aut\", \"cph\"))\n  )",
+        "Description": "'Apache' 'Arrow' <https://arrow.apache.org/> is a cross-language\n    development platform for in-memory data. It specifies a standardized\n    language-independent columnar memory format for flat and hierarchical data,\n    organized for efficient analytic operations on modern hardware. This\n    package provides an interface to the 'Arrow C++' library.",
+        "Depends": "R (>= 4.1)",
+        "License": "Apache License (>= 2.0)",
+        "URL": "https://github.com/apache/arrow/, https://arrow.apache.org/docs/r/",
+        "BugReports": "https://github.com/apache/arrow/issues",
+        "Encoding": "UTF-8",
+        "Language": "en-US",
+        "SystemRequirements": "C++20; for AWS S3 support on Linux, libcurl and\nopenssl (optional); cmake >= 3.26 (build-time only, and only\nfor full source build)",
+        "Biarch": "true",
+        "Imports": "assertthat, bit64 (>= 0.9-7), glue, methods, purrr, R6, rlang\n(>= 1.0.0), stats, tidyselect (>= 1.0.0), utils, vctrs",
+        "RoxygenNote": "7.3.3",
+        "Config/testthat/edition": "3",
+        "Config/build/bootstrap": "TRUE",
+        "Suggests": "blob, curl, cli, DBI, dbplyr, decor, distro, dplyr, duckdb\n(>= 0.2.8), hms, jsonlite, knitr, lubridate, pillar, pkgload,\nreticulate, rmarkdown, stringi, stringr, sys, testthat (>=\n3.3.0), tibble, tzdb, withr",
+        "LinkingTo": "cpp11 (>= 0.4.2)",
+        "Collate": "'arrowExports.R' 'enums.R' 'arrow-object.R' 'type.R'\n'array-data.R' 'arrow-datum.R' 'array.R' 'arrow-info.R'\n'arrow-package.R' 'arrow-tabular.R' 'buffer.R'\n'chunked-array.R' 'io.R' 'compression.R' 'scalar.R' 'compute.R'\n'config.R' 'csv.R' 'dataset.R' 'dataset-factory.R'\n'dataset-format.R' 'dataset-partition.R' 'dataset-scan.R'\n'dataset-write.R' 'dictionary.R' 'dplyr-across.R'\n'dplyr-arrange.R' 'dplyr-by.R' 'dplyr-collect.R'\n'dplyr-count.R' 'dplyr-datetime-helpers.R' 'dplyr-distinct.R'\n'dplyr-eval.R' 'dplyr-filter.R' 'dplyr-funcs-agg.R'\n'dplyr-funcs-augmented.R' 'dplyr-funcs-conditional.R'\n'dplyr-funcs-datetime.R' 'dplyr-funcs-doc.R'\n'dplyr-funcs-math.R' 'dplyr-funcs-simple.R'\n'dplyr-funcs-string.R' 'dplyr-funcs-type.R' 'expression.R'\n'dplyr-funcs.R' 'dplyr-glimpse.R' 'dplyr-group-by.R'\n'dplyr-join.R' 'dplyr-mutate.R' 'dplyr-select.R'\n'dplyr-slice.R' 'dplyr-summarize.R' 'dplyr-union.R'\n'record-batch.R' 'table.R' 'dplyr.R' 'duckdb.R' 'extension.R'\n'feather.R' 'field.R' 'filesystem.R' 'flight.R'\n'install-arrow.R' 'ipc-stream.R' 'json.R' 'memory-pool.R'\n'message.R' 'metadata.R' 'parquet.R' 'python.R'\n'query-engine.R' 'record-batch-reader.R'\n'record-batch-writer.R' 'reexports-bit64.R'\n'reexports-tidyselect.R' 'schema.R' 'udf.R' 'util.R'",
+        "NeedsCompilation": "yes",
+        "Packaged": "2026-04-27 03:37:21 UTC; bryce",
+        "Author": "Neal Richardson [aut],\n  Ian Cook [aut],\n  Nic Crane [aut],\n  Dewey Dunnington [aut] (ORCID: <https://orcid.org/0000-0002-9415-4582>),\n  Romain François [aut] (ORCID: <https://orcid.org/0000-0002-2444-4226>),\n  Jonathan Keane [aut, cre],\n  Bryce Mecum [aut],\n  Dragoș Moldovan-Grünfeld [aut],\n  Jeroen Ooms [aut],\n  Jacob Wujciak-Jens [aut],\n  Javier Luraschi [ctb],\n  Karl Dunkle Werner [ctb] (ORCID:\n    <https://orcid.org/0000-0003-0523-7309>),\n  Jeffrey Wong [ctb],\n  Apache Arrow [aut, cph]",
+        "Maintainer": "Jonathan Keane <jkeane@gmail.com>",
+        "Repository": "CRAN",
+        "Date/Publication": "2026-04-29 13:00:15 UTC",
+        "Built": "R 4.5.3; x86_64-w64-mingw32; 2026-06-29 03:57:16 UTC; windows",
+        "Archs": "x64",
+        "RemoteType": "standard",
+        "RemotePkgRef": "arrow",
+        "RemoteRef": "arrow",
+        "RemoteRepos": "https://mirrors.pku.edu.cn/CRAN",
+        "RemoteSha": "24.0.0"
+      }
+    },
     "askpass": {
       "Source": "CRAN",
       "Repository": "https://mirrors.pku.edu.cn/CRAN",
@@ -926,6 +974,34 @@
         "Date/Publication": "2024-10-04 07:20:03 UTC",
         "Built": "R 4.4.3; x86_64-w64-mingw32; 2025-03-13 02:18:49 UTC; windows",
         "Archs": "x64"
+      }
+    },
+    "assertthat": {
+      "Source": "CRAN",
+      "Repository": "https://mirrors.pku.edu.cn/CRAN",
+      "description": {
+        "Package": "assertthat",
+        "Title": "Easy Pre and Post Assertions",
+        "Version": "0.2.1",
+        "Authors@R": "\n  person(\"Hadley\", \"Wickham\", , \"hadley@rstudio.com\", c(\"aut\", \"cre\"))",
+        "Description": "An extension to stopifnot() that makes it easy to declare \n    the pre and post conditions that you code should satisfy, while also \n    producing friendly error messages so that your users know what's gone\n    wrong.",
+        "License": "GPL-3",
+        "Imports": "tools",
+        "Suggests": "testthat, covr",
+        "RoxygenNote": "6.0.1",
+        "Collate": "'assert-that.r' 'on-failure.r' 'assertions-file.r'\n'assertions-scalar.R' 'assertions.r' 'base.r'\n'base-comparison.r' 'base-is.r' 'base-logical.r' 'base-misc.r'\n'utils.r' 'validate-that.R'",
+        "NeedsCompilation": "no",
+        "Packaged": "2019-03-21 13:11:01 UTC; hadley",
+        "Author": "Hadley Wickham [aut, cre]",
+        "Maintainer": "Hadley Wickham <hadley@rstudio.com>",
+        "Repository": "CRAN",
+        "Date/Publication": "2019-03-21 14:53:46 UTC",
+        "Built": "R 4.5.2; ; 2025-12-30 01:28:01 UTC; windows",
+        "RemoteType": "standard",
+        "RemotePkgRef": "assertthat",
+        "RemoteRef": "assertthat",
+        "RemoteRepos": "https://mirrors.pku.edu.cn/CRAN",
+        "RemoteSha": "0.2.1"
       }
     },
     "backports": {
@@ -3015,8 +3091,13 @@
         "Author": "Jeroen Ooms [aut, cre] (<https://orcid.org/0000-0002-4035-0289>),\n  Duncan Temple Lang [ctb],\n  Lloyd Hilaiel [cph] (author of bundled libyajl)",
         "Repository": "CRAN",
         "Date/Publication": "2025-03-27 06:40:02 UTC",
-        "Built": "R 4.4.3; x86_64-w64-mingw32; 2025-12-03 01:46:48 UTC; windows",
-        "Archs": "x64"
+        "Built": "R 4.5.3; x86_64-w64-mingw32; 2026-06-27 01:21:16 UTC; windows",
+        "Archs": "x64",
+        "RemoteType": "standard",
+        "RemotePkgRef": "jsonlite",
+        "RemoteRef": "jsonlite",
+        "RemoteRepos": "https://mirrors.pku.edu.cn/CRAN",
+        "RemoteSha": "2.0.0"
       }
     },
     "knitr": {
@@ -3301,7 +3382,12 @@
         "Maintainer": "Winston Chang <winston@rstudio.com>",
         "Repository": "CRAN",
         "Date/Publication": "2021-11-26 16:11:10 UTC",
-        "Built": "R 4.4.3; ; 2025-03-13 02:35:10 UTC; windows"
+        "Built": "R 4.5.3; ; 2026-06-29 02:58:08 UTC; windows",
+        "RemoteType": "standard",
+        "RemotePkgRef": "memoise",
+        "RemoteRef": "memoise",
+        "RemoteRepos": "https://mirrors.pku.edu.cn/CRAN",
+        "RemoteSha": "2.0.1"
       }
     },
     "mime": {
@@ -3744,7 +3830,12 @@
         "Maintainer": "Barret Schloerke <barret@posit.co>",
         "Repository": "CRAN",
         "Date/Publication": "2025-11-01 06:30:02 UTC",
-        "Built": "R 4.4.3; ; 2025-12-03 02:58:40 UTC; windows"
+        "Built": "R 4.5.3; ; 2026-06-29 02:58:35 UTC; windows",
+        "RemoteType": "standard",
+        "RemotePkgRef": "promises",
+        "RemoteRef": "promises",
+        "RemoteRepos": "https://mirrors.pku.edu.cn/CRAN",
+        "RemoteSha": "1.5.0"
       }
     },
     "ps": {
@@ -5357,16 +5448,91 @@
   },
   "files": {
     "APP.R": {
-      "checksum": "c32e93a4c36b0652af4548766a899898"
+      "checksum": "63e6ca04a3b2a2fc382f07bb68f23204"
     },
-    "data/data.RData": {
-      "checksum": "a56ac6238fcc63eb018222d562995e83"
+    "data/data.parquet": {
+      "checksum": "3ff4de61ed6249a084058d78f6a116ab"
     },
-    "data/lncRNA_bed_data.RData": {
-      "checksum": "740ceb52dd06fb57d837ed3e7580fe6e"
+    "data/lncRNA_bed_data.parquet": {
+      "checksum": "8ea60786b4c324a213201793ca25ee13"
     },
-    "data/protein_binding_data.RData": {
-      "checksum": "a2308e4ef24ac1cc854f7b132ce245c4"
+    "data/protein_binding_data.partition/chr=chr1/part-0.parquet": {
+      "checksum": "393274f5f332d6074d73e511f0c96349"
+    },
+    "data/protein_binding_data.partition/chr=chr10/part-0.parquet": {
+      "checksum": "6ec6f4eb6bd00a453a33a1c8ecf79dd8"
+    },
+    "data/protein_binding_data.partition/chr=chr11/part-0.parquet": {
+      "checksum": "76182685ac9b4ec48933178d672bd6c5"
+    },
+    "data/protein_binding_data.partition/chr=chr12/part-0.parquet": {
+      "checksum": "4aa3488a6f0f30d291cbc22b35eb13d8"
+    },
+    "data/protein_binding_data.partition/chr=chr13/part-0.parquet": {
+      "checksum": "bd205cd1907c84c118c66ab11f04d43d"
+    },
+    "data/protein_binding_data.partition/chr=chr14/part-0.parquet": {
+      "checksum": "cd653712ae0a7d130f5406fa56137ca4"
+    },
+    "data/protein_binding_data.partition/chr=chr15/part-0.parquet": {
+      "checksum": "c0c862a891364d4d59a279b298ff3290"
+    },
+    "data/protein_binding_data.partition/chr=chr16/part-0.parquet": {
+      "checksum": "c626e503b02caf827ec9be5178bf6bb7"
+    },
+    "data/protein_binding_data.partition/chr=chr17/part-0.parquet": {
+      "checksum": "0d8a34e524c0eb3f9e4a7b839833d0be"
+    },
+    "data/protein_binding_data.partition/chr=chr18/part-0.parquet": {
+      "checksum": "c87ce145550c98518df9a25f3c4399b5"
+    },
+    "data/protein_binding_data.partition/chr=chr19/part-0.parquet": {
+      "checksum": "2c5d4e6f5a9a383a0f202de7a18e6689"
+    },
+    "data/protein_binding_data.partition/chr=chr2/part-0.parquet": {
+      "checksum": "1aaed3af76655fe942e8d429ba403646"
+    },
+    "data/protein_binding_data.partition/chr=chr20/part-0.parquet": {
+      "checksum": "f86343a0ff15a4344a637115c1d12eb5"
+    },
+    "data/protein_binding_data.partition/chr=chr21/part-0.parquet": {
+      "checksum": "265b45ea7fd07907af9dcb2d0bee7760"
+    },
+    "data/protein_binding_data.partition/chr=chr22/part-0.parquet": {
+      "checksum": "be8f05ec44f2caadd6984b3ae16f552f"
+    },
+    "data/protein_binding_data.partition/chr=chr3/part-0.parquet": {
+      "checksum": "0509f5fdb89a7d8ae47399dc6d3645f9"
+    },
+    "data/protein_binding_data.partition/chr=chr4/part-0.parquet": {
+      "checksum": "e3f28650703d8efbd302e73ff1cfe647"
+    },
+    "data/protein_binding_data.partition/chr=chr5/part-0.parquet": {
+      "checksum": "d74033bc4029be58a1bb466f91abd5cc"
+    },
+    "data/protein_binding_data.partition/chr=chr6/part-0.parquet": {
+      "checksum": "030dbb0b301b53aadcb64cf10c8b3788"
+    },
+    "data/protein_binding_data.partition/chr=chr7/part-0.parquet": {
+      "checksum": "b60f3b7b2ea222c55af286d9c3cfad4f"
+    },
+    "data/protein_binding_data.partition/chr=chr8/part-0.parquet": {
+      "checksum": "674d8f98e02556b21ae9d69a84f6ad97"
+    },
+    "data/protein_binding_data.partition/chr=chr9/part-0.parquet": {
+      "checksum": "12a338063246b88c7b47fe5aa5738bfc"
+    },
+    "data/protein_binding_data.partition/chr=chrX/part-0.parquet": {
+      "checksum": "123a1813e0a5b553704c73c51f2e4b87"
+    },
+    "data/protein_binding_data.partition/chr=chrY/part-0.parquet": {
+      "checksum": "4aa0a0acd03740738128f9ad23df37a5"
+    },
+    "data/rbp_data.parquet": {
+      "checksum": "03b79ead5c0615af3ffd075097a777a0"
+    },
+    "data/tf_data.parquet": {
+      "checksum": "12e3fea6ba93c660b9b26e8d171b43da"
     },
     "www/footer.html": {
       "checksum": "034183de89d044cd831c2bbbc9bfba52"
