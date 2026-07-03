@@ -332,12 +332,48 @@ ui <- shinyUI(
       ),
       # About Tab
       tabPanel(title = "About", value = "about", icon = icon("ghost"),
-               br(),hr(),
-               h2("User Tutorial"),wellPanel(style="#E1F5FE",p("HuRInterDB supports two entry points for data retrieval: homepage quick search and advanced filter page."),p("Advanced search page supports multi-condition filtering, table sorting, keyword search and result export."),p("RPI analysis module generates wordcloud, RBP binding track, PPI network and GO enrichment plots for selected lncRNA.")),
-               h2("Support & FAQ"),wellPanel(style="#E1F5FE",p("If homepage search fails, clear input and re-enter target gene symbol.")),
-               h2("Contact"),wellPanel(style="#E1F5FE",p("Jian Yan: jian.yan@nwu.edu.cn"),p("Wenju Sun: wenju.sun@nwu.edu.cn"),p("Qianwen Xie: xieqianwen@stumail.nwu.edu.cn"))
+              br(), hr(),              
+              # Tutorial
+              titlePanel(h2("Tutorial", style = "color: #0277bd; text-align: left;")),
+              wellPanel(style = "background: #E1F5FE",
+                        p("Welcome to this step-by-step tutorial on using HuRInterDB for retrieving and analyzing data.", style = "margin-top: 12px; font-size: 18px;"),
+                        p(strong("How to search your intersted gene?"), style = "margin-top: 12px; font-size: 18px;"),
+                        p("Users can perform data searches from either the Home Page or the Search Page. On the Home Page, 
+                          a prominent search bar allows quick queries by entering keywords.", style = "margin-top: 12px; margin-left: 15px; font-size: 18px;"),
+                        p("Alternatively, the Search Page provides advanced options for a more refined search. 
+                          Once a search is submitted, the system processes the request and returns matching results in a clear, organized table format.
+                          The search box at the top of the table supports fuzzy text matching across all columns.
+                          The table also supports interactive features like sorting by column and pagination. 
+                          The nine dropdown menus below can be used to filter the content of each field precisely.", style = "margin-top: 12px; margin-left: 15px; font-size: 18px;"),
+                        p("The Search page also supports exporting the current query results. All files are exported in CSV format and can be opened with Excel.", style = "margin-top: 12px; margin-left: 15px; font-size: 18px;"),
+                        br(),
+                        p(strong("How to use RPI on-line analysis module?"), style = "margin-top: 12px; font-size: 18px;"),
+                        p("The RPIs Analysis section provides an online tool for analyzing RNA-protein interactions.
+                          Enter the lncRNA name and click the 'Continue' button,it will start the analysis process.", style = "margin-top: 12px; margin-left: 15px; font-size: 18px;"),
+                        p("The analysis results consisting of four visualizations and one detailed results table to support in-depth interpretation.The four generated images provide intuitive insights into the data:", style = "margin-top: 12px; margin-left: 15px; font-size: 18px;"),
+                        p("•    Word Cloud: Highlights the most frequent terms or keywords from the dataset, with font size indicating term prominence.", style = "margin-top: 12px; margin-left: 15px; font-size: 18px;"),
+                        p("•    Protein Binding Diagram: Illustrates the predicted or known binding interactions between proteins and ligands or other molecules.", style = "margin-top: 12px; margin-left: 15px; font-size: 18px;"),
+                        p("•    PPI Network displays the interaction network among proteins, showing functional relationships and key hub proteins.", style = "margin-top: 12px; margin-left: 15px; font-size: 18px;"),
+                        p("•    GO Enrichment Dot Plot: Visualizes the Gene Ontology (GO) enrichment results, with dots representing biological processes, molecular functions, or cellular components—positioned and colored by significance and enrichment score.", style = "margin-top: 12px; margin-left: 15px; font-size: 18px;"),
+                        p("In addition to the visual outputs, a detailed results table is provided, listing all enriched terms, associated genes, p-values, enrichment scores, and other relevant metrics. 
+                          This table can be easily downloaded in CSV or Excel format for further analysis or reporting.
+                          Together, these outputs enable users to quickly interpret complex biological data and export detailed findings for downstream applications.", style = "margin-top: 12px; margin-left: 15px; font-size: 18px;")
+              ),
+              # Help
+              titlePanel(h2("Help", style = "color: #0277bd; text-align: left;")),
+              wellPanel(style = "background: #E1F5FE",
+                        p("•  If you find that the search box on the home page isn't working, try clicking the delete icon next to the search icon, then re-enter the name of the lncRNA or protein you wish to search for.", style = "margin-top: 12px; font-size: 18px;")
+              ),
+              # Contact Us
+              titlePanel(h2("Contact Us", style = "color: #0277bd; text-align: left;")),
+              wellPanel(style = "background: #E1F5FE",
+                        p("Welcome researchers from all over the world to provide valuable advice.Please feel free to contact us if you have any questions, comments or suggestions.", style = "margin-top: 12px; font-size: 18px;"),
+                        p(strong("Jian Yan"),": jian.yan@nwu.edu.cn", style = "margin-top: 12px; font-size: 18px;"),
+                        p(strong("Wenju Sun"),": wenju.sun@nwu.edu.cn", style = "margin-top: 12px; font-size: 18px;"),
+                        p(strong("Qianwen Xie"),": xieqianwen@stumail.nwu.edu.cn", style = "margin-top: 12px; font-size: 18px;")
+              )
       )
-    ),
+  ),
     div(class="footer", includeHTML("www/footer.html"))
   )
 )
