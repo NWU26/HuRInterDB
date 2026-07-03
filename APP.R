@@ -6,12 +6,12 @@ library(tidyverse)
 library(wordcloud2)
 library(clusterProfiler)
 library(org.Hs.eg.db)
+library(ggtangle)
 library(ggplot2)
 library(igraph)
 library(waiter)
 library(shadowtext)
 library(arrow)
-
 
 # Global plot configuration
 theme_set(theme_bw(base_family = "DejaVu Sans"))
@@ -655,7 +655,20 @@ server <- shinyServer(function(input, output, session){
     prots <- unique(analysis_result()$res$Protein_name)
     prots <- prots[nchar(prots)>0]
     go_obj <- enrichGO(prots, keyType="SYMBOL", OrgDb=org.Hs.eg.db, ont="ALL")
-    dotplot(go_obj, showCategory=15)
+    dotplot(go_obj, showCategory = 15, 
+            color = "pvalue",
+            label_format = 80,
+            font.size = 11,
+            title = "GO Pathway Enrichment") +
+      theme(text = element_text(size = 12),
+            axis.text.y = element_text(family = "DejaVu Sans", size = 10),
+            axis.text.x = element_text(family = "DejaVu Sans", size = 9),
+            axis.title = element_text(family = "DejaVu Sans", size = 12),
+            legend.text = element_text(family = "DejaVu Sans"),
+            legend.title = element_text(family = "DejaVu Sans"),
+            plot.background = element_rect(fill = "white", color = NA),
+            plot.title = element_text(family = "DejaVu Sans", face = "bold"))
+
   })
   output$godotplot <- renderPlot(GO_plot())
   output$download_godotplot <- downloadHandler("go.png",function(file) 
