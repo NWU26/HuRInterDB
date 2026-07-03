@@ -508,7 +508,7 @@ server <- shinyServer(function(input, output, session){
     ggplot() +
       geom_segment(data=inner_join(edges,coords,by=c("from"="name")) %>% inner_join(coords,by=c("to"="name")), aes(x=x.x,y=y.x,xend=x.y,yend=y.y), color="gray70") +
       geom_point(data=coords,aes(x=x,y,color=color,size=size),alpha=0.9) +
-      geom_text(data=coords,aes(x=x,y,label=name),vjust=-0.8,size=3.5) +
+      geom_text(data=coords,aes(x=x,y,label=name), family = "DejaVu Sans",vjust=-0.8,size=3.5) +
       scale_color_identity() + scale_size_identity() + theme_void() +
       labs(title=paste("Interaction Network of",pn))
            
@@ -646,8 +646,10 @@ server <- shinyServer(function(input, output, session){
         plot.subtitle = element_text(family = "DejaVu Sans", size = 9, color = "gray50", hjust = 0.5))
   })
   output$network <- renderPlot(PPI_plot())
-  output$download_network <- downloadHandler("ppi.png",function(file)
-  ggsave(file,PPI_plot(),w=12,h=10))
+  output$download_network <- downloadHandler("ppi.png",
+    function(file)
+    ggsave(file,PPI_plot(),w=12,h=10)
+  )
 
   # GO Dotplot
   GO_plot <- reactive({

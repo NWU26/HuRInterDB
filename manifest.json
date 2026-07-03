@@ -5448,13 +5448,16 @@
   },
   "files": {
     "APP.R": {
-      "checksum": "63e6ca04a3b2a2fc382f07bb68f23204"
+      "checksum": "3f73c547982a70bb6273f2aced1ab623"
     },
     "data/data.parquet": {
       "checksum": "3ff4de61ed6249a084058d78f6a116ab"
     },
     "data/lncRNA_bed_data.parquet": {
       "checksum": "8ea60786b4c324a213201793ca25ee13"
+    },
+    "data/protein_binding_data.partition.zip": {
+      "checksum": "ec66b0d23eb260292d34c8add38c62b2"
     },
     "data/protein_binding_data.partition/chr=chr1/part-0.parquet": {
       "checksum": "393274f5f332d6074d73e511f0c96349"
