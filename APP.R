@@ -27,43 +27,29 @@ data_cache_env <- new.env(hash = TRUE, parent = emptyenv(), size = 3L)
 # Load lightweight lncRNA coordinate data (small volume, no startup block)
 lncRNA_bed_data <- read_parquet(PATH_BED_PARQUET)
 
-# Filter main lncRNA-protein interaction dataset
 fetch_filtered_data <- function(filter_rna = NULL, filter_prot = NULL, filter_cell = NULL, filter_method = NULL) {
   ds <- open_dataset(PATH_DATA_PARQUET)
+  df <- ds %>% collect()
+
   if (!is.null(filter_rna) && trimws(filter_rna) != "") {
-    ds <- ds %>% filter(lncRNA_Name == paste0(filter_rna))
+    kw <- trimws(filter_rna)
+    mask <- grepl(paste0("^", kw, "$"), df$lncRNA_Name, ignore.case = TRUE)
+    df <- df[mask, , drop = FALSE]
   }
   if (!is.null(filter_prot) && trimws(filter_prot) != "") {
-    ds <- ds %>% filter(Protein_name == paste0(filter_prot))
+    kw <- trimws(filter_prot)
+    mask <- grepl(paste0("^", kw, "$"), df$Protein_name, ignore.case = TRUE)
+    df <- df[mask, , drop = FALSE]
   }
   if (!is.null(filter_cell) && trimws(filter_cell) != "") {
-    ds <- ds %>% filter(Cell_Line == paste0(filter_cell))
+    kw <- trimws(filter_cell)
+    mask <- grepl(paste0("^", kw, "$"), df$Cell_Line, ignore.case = TRUE)
+    df <- df[mask, , drop = FALSE]
   }
   if (!is.null(filter_method) && trimws(filter_method) != "") {
-    ds <- ds %>% filter(Method == paste0(filter_method))
+    df <- df[df$Method == filter_method, , drop = FALSE]
   }
-  df <- ds %>% collect()
   return(df)
-}
-
-# Fuzzy match lncRNA names by input keyword
-match_rna <- function(keyword, limit = 30) {
-  kw <- trimws(keyword)
-  if (nchar(kw) < 2) return(character(0))
-  ds <- open_dataset(PATH_DATA_PARQUET)
-  dt <- ds %>% filter(str_detect(tolower(lncRNA_Name), tolower(kw))) %>% select(lncRNA_Name) %>% collect()
-  res <- dt %>% distinct() %>% slice_head(n = limit) %>% pull(lncRNA_Name)
-  return(res)
-}
-
-# Fuzzy match protein names by input keyword
-match_protein <- function(keyword, limit = 30) {
-  kw <- trimws(keyword)
-  if (nchar(kw) < 2) return(character(0))
-  ds <- open_dataset(PATH_DATA_PARQUET)
-  dt <- ds %>% filter(str_detect(tolower(Protein_name), tolower(kw))) %>% select(Protein_name) %>% collect()
-  res <- dt %>% distinct() %>% slice_head(n = limit) %>% pull(Protein_name)
-  return(res)
 }
 
 # Fuzzy match cell line names by input keyword
@@ -523,7 +509,7 @@ server <- shinyServer(function(input, output, session){
 
   # Main analysis pipeline
   analysis_result <- eventReactive(input$analyze_btn, {
-    rna <- trimws(input$ana_rna)
+    rna <- trimws(toupper(input$ana_rna))
     cell <- trimws(input$ana_cell)
     meth <- input$method_input
     if(rna==""){
