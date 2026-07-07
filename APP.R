@@ -197,15 +197,15 @@ ui <- shinyUI(
                fluidRow(
                  column(4, div(class = "stat-card",
                                tags$i(class = "fas fa-dna fa-2x", style = "margin-bottom: 1px;"),
-                               h2("55925 lncRNA", style = "margin: 0; font-size: 24px;"))
+                               h2("55,925 lncRNA", style = "margin: 0; font-size: 24px;"))
                  ),
                  column(4, div(class = "stat-card",
                                tags$i(class = "fas fa-project-diagram fa-2x", style = "margin-bottom: 1px;"),
-                               h2("7864 Protein", style = "margin: 0; font-size: 24px;"))
+                               h2("7,864 Protein", style = "margin: 0; font-size: 24px;"))
                  ),
                  column(4, div(class = "stat-card",
                                tags$i(class = "fas fa-atom fa-2x", style = "margin-bottom: 1px;"),
-                               h2("2195828 Interaction", style = "margin: 0; font-size: 24px;"))
+                               h2("2,159,916 Interaction", style = "margin: 0; font-size: 24px;"))
                  )
                ),
                ## ----  Resources  ----   
