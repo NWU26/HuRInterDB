@@ -65,6 +65,8 @@ match_cell <- function(keyword, limit = 30) {
 # Pre-generate hyperlink HTML columns for data table rendering
 prepare_data_with_links <- function(df) {
   if (!"Entry" %in% colnames(df)) df$Entry <- ""
+  if (!"KEGG" %in% colnames(df)) df$KEGG <- ""
+
   
   df$lncRNA_Name_link <- with(df, sprintf(
     '<a href="https://www.genecards.org/cgi-bin/carddisp.pl?gene=%s" target="_blank">%s</a>',
@@ -86,6 +88,11 @@ prepare_data_with_links <- function(df) {
   
   df$Protein_Domains_link <- with(df, ifelse(Entry != "", 
     sprintf('<a href="https://www.ebi.ac.uk/interpro/protein/UniProt/%s" target="_blank">View</a>', Entry),
+    ""
+  ))
+
+  df$KEGG_link <- with(df, ifelse(KEGG != "", 
+    sprintf('<a href="https://www.kegg.jp/entry/%s" target="_blank">%s</a>', KEGG, KEGG),
     ""
   ))
   
@@ -425,7 +432,7 @@ server <- shinyServer(function(input, output, session){
     if(nrow(res) == 0){
       return(datatable(data.frame(NOTE = "No matched data"), rownames = FALSE))
     }
-    target_cols <- c("lncRNA_Name_link","lncRNA_RNALocate_link","Protein_name_link","Protein_Domains_link","Cell_Line","Method","Score","Data_link")
+    target_cols <- c("lncRNA_Name_link","lncRNA_RNALocate_link","Protein_name_link","Protein_Domains_link","KEGG_link","Cell_Line","Method","Score","Data_link")
     valid_cols <- target_cols[target_cols %in% colnames(res)]
     disp <- unique(res[, valid_cols, drop = FALSE])
 
@@ -442,7 +449,7 @@ server <- shinyServer(function(input, output, session){
       });
     ')
 
-    datatable(disp,escape = FALSE,filter = "top",rownames = FALSE,colnames = c("lncRNA","lncRNA Locate","Protein","Protein Domain","Cell Line","Method","Score","Reference"),
+    datatable(disp,escape = FALSE,filter = "top",rownames = FALSE,colnames = c("lncRNA","lncRNA Locate","Protein","Protein Domain","Protein KEGG","Cell Line","Method","Score","Reference"),
       callback = table_callback, # Critical dynamic event binding
       options = list(pageLength = 10,lengthMenu = c(10, 25, 50),deferRender = TRUE # Speed up large dataset rendering
       )
