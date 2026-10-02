@@ -134,7 +134,7 @@ get_protein_binding_data <- function(chr_filter = NULL, pos_min = NULL, pos_max 
     assign("prot_bind_full", full_dt, envir = data_cache_env)
   }
   if (!is.null(chr_filter) && !is.null(pos_min) && !is.null(pos_max)) {
-    full_dt <- full_dt %>% filter(chr == chr_filter, between(position, pos_min, pos_max))
+    full_dt <- full_dt %>% filter(Chr == chr_filter, between(Position, pos_min, pos_max))
   }
   return(full_dt)
 }
@@ -204,15 +204,15 @@ ui <- shinyUI(
                fluidRow(
                  column(4, div(class = "stat-card",
                                tags$i(class = "fas fa-dna fa-2x", style = "margin-bottom: 1px;"),
-                               h2("55,924 lncRNA", style = "margin: 0; font-size: 24px;"))
+                               h2("2,440,594 lncRNA", style = "margin: 0; font-size: 24px;"))
                  ),
                  column(4, div(class = "stat-card",
                                tags$i(class = "fas fa-project-diagram fa-2x", style = "margin-bottom: 1px;"),
-                               h2("7,863 Protein", style = "margin: 0; font-size: 24px;"))
+                               h2("14,888 Protein", style = "margin: 0; font-size: 24px;"))
                  ),
                  column(4, div(class = "stat-card",
                                tags$i(class = "fas fa-atom fa-2x", style = "margin-bottom: 1px;"),
-                               h2("2,159,916 Interaction", style = "margin: 0; font-size: 24px;"))
+                               h2("2,440,594 Interaction", style = "margin: 0; font-size: 24px;"))
                  )
                ),
                ## ----  Resources  ----   
@@ -302,14 +302,15 @@ ui <- shinyUI(
                column(12, div(class="resultBox",
                               h3("Interaction Analysis Results"),
                               tabsetPanel(
-                                tabPanel("Protein Wordcloud", withSpinner(wordcloud2Output("wordcloud"),type=6),downloadButton("download_wordcloud")),
-                                tabPanel("RBP binding", withSpinner(plotOutput("lolliplot"),type=6),downloadButton("download_lolliplot")),
-                                tabPanel("PPI Network", withSpinner(plotOutput("network"),type=6),downloadButton("download_network")),
-                                tabPanel("GO Enrichment", withSpinner(plotOutput("godotplot"),type=6),downloadButton("download_godotplot"))
+                                tabPanel("Protein Wordcloud", withSpinner(wordcloud2Output("wordcloud"),type = 6),downloadButton("download_wordcloud")),
+                                tabPanel("RBP binding", div(style = "margin-bottom: 10px; padding: 5px 0;", uiOutput("transcript_selector")),
+                                          withSpinner(plotOutput("lolliplot"),type = 6),downloadButton("download_lolliplot")),
+                                tabPanel("PPI Network", withSpinner(plotOutput("network"),type = 6),downloadButton("download_network")),
+                                tabPanel("GO Enrichment", withSpinner(plotOutput("godotplot"),type = 6),downloadButton("download_godotplot"))
                               )),
                h3("List of Interacting Proteins"),br(),
-               column(7,withSpinner(DTOutput("analysis_table"),type=6),downloadLink("download_table_csv","CSV")),
-               column(5,withSpinner(DTOutput("analysis_table2"),type=6),downloadLink("download_table_csv2","CSV"))
+               column(7,withSpinner(DTOutput("analysis_table"),type = 6),downloadLink("download_table_csv","CSV")),
+               column(5,withSpinner(DTOutput("analysis_table2"),type = 6),downloadLink("download_table_csv2","CSV"))
                )
       ),
 
@@ -516,30 +517,37 @@ server <- shinyServer(function(input, output, session){
 
   # Main analysis pipeline
   analysis_result <- eventReactive(input$analyze_btn, {
-    rna <- trimws(toupper(input$ana_rna))
-    cell <- trimws(input$ana_cell)
-    meth <- input$method_input
-    if(rna==""){
-      showNotification("Please input target lncRNA", type="warning")
-      return(NULL)
-    }
-    tryCatch({
-      df <- fetch_filtered_data(filter_rna=rna,filter_cell=cell,filter_method=meth)
-      if(nrow(df)==0){
-        showNotification("No matched data", type="warning")
+      rna  <- trimws(toupper(input$ana_rna))
+      cell <- trimws(input$ana_cell)
+      meth <- input$method_input
+      if (rna == "") {
+        showNotification("Please input target lncRNA", type = "warning")
         return(NULL)
       }
-      lnc_info <- lncRNA_bed_data %>% filter(lncRNA_name == rna)
-      if(nrow(lnc_info)==0) return(list(res=df,prot_bind=data.frame(),exons=data.frame(),pos_min=NA,pos_max=NA))
-      chr_t <- as.character(lnc_info$chr[1])
-      pmin <- min(lnc_info$start)
-      pmax <- max(lnc_info$end)
-      bind_dt <- get_protein_binding_data(chr_filter=chr_t,pos_min=pmin,pos_max=pmax)
-      list(res=df,prot_bind=bind_dt,exons=lnc_info %>% filter(region=="exon"),pos_min=pmin,pos_max=pmax)
-    }, error=function(e){
-      showNotification(paste("Analysis failed:",e$message),type="error")
-      NULL
-    })
+      tryCatch({
+        df <- fetch_filtered_data(filter_rna = rna, filter_cell = cell, filter_method = meth)
+        if (nrow(df) == 0) {
+          showNotification("No matched data", type = "warning")
+          return(NULL)
+        }
+        lnc_info <- lncRNA_bed_data %>% filter(lncRNA_name == rna)
+        if (nrow(lnc_info) == 0) {
+          return(list(res = df, lnc_info = data.frame(),
+                      transcripts = character(0), rna = rna))
+        }
+        transcripts <- unique(lnc_info$transcript_id)
+        transcripts <- transcripts[!is.na(transcripts) & transcripts != ""]
+
+        list(
+          res         = df,
+          lnc_info    = lnc_info,
+          transcripts = transcripts,
+          rna         = rna
+        )
+      }, error = function(e) {
+        showNotification(paste("Analysis failed:", e$message), type = "error")
+        NULL
+      })
   })
 
   # Wordcloud
@@ -555,21 +563,99 @@ server <- shinyServer(function(input, output, session){
   output$download_wordcloud <- downloadHandler("wordcloud.html", function(file) saveWidget(wordcloud_plot(), file))
 
   # RBP Lollipop plot
-  RBP_plot <- reactive({
+  # 动态渲染转录本选择框
+  output$transcript_selector <- renderUI({
+    req(analysis_result())
+    trs <- analysis_result()$transcripts
+    if (length(trs) == 0) {
+      return(div(style = "color: gray;",
+                tags$em("No transcript annotation available for this lncRNA.")))
+    }
+    selectInput(
+      inputId  = "selected_transcript",
+      label    = tags$b("Select Transcript ID:"),
+      choices  = trs,
+      selected = trs[1],
+      width    = "400px"
+    )
+  })
+
+  # 根据所选转录本动态计算坐标与结合数据
+  transcript_binding_data <- reactive({
     req(analysis_result())
     dat <- analysis_result()
+    if (is.null(dat) || nrow(dat$lnc_info) == 0) return(NULL)
+
+    tr <- input$selected_transcript
+    # 未选择 / 无效选择时回退到第一个转录本
+    if (is.null(tr) || tr == "" || !(tr %in% dat$lnc_info$transcript_id)) {
+      tr <- dat$transcripts[1]
+    }
+    if (is.null(tr) || is.na(tr) || tr == "") return(NULL)
+
+    tr_info <- dat$lnc_info %>% filter(transcript_id == tr)
+    if (nrow(tr_info) == 0) return(NULL)
+
+    chr_t <- as.character(tr_info$chr[1])
+    pmin  <- min(tr_info$start)
+    pmax  <- max(tr_info$end)
+
+    bind_dt <- get_protein_binding_data(
+      chr_filter = chr_t,
+      pos_min    = pmin,
+      pos_max    = pmax
+    )
+
+    list(
+      prot_bind     = bind_dt,
+      exons         = tr_info %>% filter(region == "exon"),
+      pos_min       = pmin,
+      pos_max       = pmax,
+      transcript_id = tr,
+      chr           = chr_t
+    )
+  })
+
+  RBP_plot <- reactive({
+    req(transcript_binding_data())
+    dat  <- transcript_binding_data()
     bind <- dat$prot_bind
-    ex <- dat$ex
-    if(nrow(bind)==0 || is.na(dat$pos_min)) return(ggplot()+annotate("text",0.5,0.5,"No RBP binding data",size=6,color="red")+theme_void())
-    ggplot() + 
+    ex   <- dat$exons
+
+    if (nrow(bind) == 0 || is.na(dat$pos_min)) {
+      return(
+        ggplot() +
+          annotate("text", 0.5, 0.5,
+                  label = paste("No RBP binding data for", dat$transcript_id),
+                  size = 5, color = "red") +
+          theme_void()
+      )
+    }
+
+    ggplot() +
       geom_hline(yintercept = 0.1, linewidth = 1.5, color = "black", linetype = "solid") +
-      geom_rect(data=ex,aes(xmin=start,xmax=end,ymin=0,ymax=0.2),fill=rep("#7EB7DC", nrow(ex))) +
-      geom_segment(data=bind,aes(x=position,xend=position,y = 0.2, yend = 1),linewidth = 0.3, colour = "black") +
-      geom_point(data=bind,aes(x=position, y = 1),size = 3, alpha = 0.7,fill="#E64B35",shape=21) +
-      geom_text(data=bind,aes(x=position,y=1.08,label=protein_name), family = "DejaVu Sans",size = 6,angle=90,hjust=0, color = "black") +
-      xlim(dat$pos_min,dat$pos_max) + ylim(-0.2, 1.8) + theme_void() + labs(title=input$ana_rna)+
-    theme(plot.background = element_rect(fill = "white", color = NA),
-          plot.title = element_text(hjust = 0.5, size = 16, family = "DejaVu Sans", face = "bold"))
+      geom_rect(data = ex,
+                aes(xmin = start, xmax = end, ymin = 0, ymax = 0.2),
+                fill = "#7EB7DC") +
+      geom_segment(data = bind,
+                  aes(x = Position, xend = Position, y = 0.2, yend = 1),
+                  linewidth = 0.3, colour = "black") +
+      geom_point(data = bind,
+                aes(x = Position, y = 1),
+                size = 3, alpha = 0.7, fill = "#E64B35", shape = 21) +
+      geom_text(data = bind,
+                aes(x = Position, y = 1.08, label = Protein_name),
+                family = "DejaVu Sans", size = 5, angle = 90,
+                hjust = 0, color = "black") +
+      xlim(dat$pos_min, dat$pos_max) +
+      ylim(-0.2, 1.8) +
+      theme_void() +
+      labs(title = paste0(analysis_result()$rna, "  (", dat$transcript_id, ")")) +
+      theme(
+        plot.background = element_rect(fill = "white", color = NA),
+        plot.title = element_text(hjust = 0.5, size = 14,
+                                  family = "DejaVu Sans", face = "bold")
+      )
   })
   output$lolliplot <- renderPlot(RBP_plot())
   output$download_lolliplot <- downloadHandler("rbp_plot.png",function(file) 
@@ -589,13 +675,55 @@ server <- shinyServer(function(input, output, session){
                 theme_void())
     }
 
-    safe_ppi <- tryCatch(getPPI(proteins_freq$protein_symbol, taxID="9606"), error=function(e) NULL)
+    all_prots <- proteins_freq$protein_symbol
+    batch_size <- 80
+    ppi_list <- list()
+    for (i in seq(1, length(all_prots), by = batch_size)) {
+      batch <- all_prots[i:min(i + batch_size - 1, length(all_prots))]
+      if (length(ppi_list) > 0) Sys.sleep(1)
+      result <- tryCatch(getPPI(batch, taxID="9606", add_nodes = 0, required_score = 700), error=function(e) NULL)
+      if (!is.null(result) && length(V(result)) > 0) ppi_list[[length(ppi_list)+1]] <- result
+    }
+    safe_ppi <- if (length(ppi_list) > 0) Reduce(igraph::union, ppi_list) else NULL
+    
     if(is.null(safe_ppi) || length(V(safe_ppi)) == 0 || length(E(safe_ppi)) == 0) {
         return(ggplot() + 
                 annotate("text", x = 0.5, y = 0.5, 
                         label = "Non-interacting proteins.", size = 6, color = "red") +
                 theme_void())
     }
+    
+    MAX_NODES <- 100
+    if (length(V(safe_ppi)) > MAX_NODES) {
+      deg_all <- igraph::degree(safe_ppi, mode = "all")
+      
+      direct_prots <- intersect(V(safe_ppi)$name, proteins_freq$protein_symbol)
+      if (length(direct_prots) > 0) {
+        direct_prots <- direct_prots[order(deg_all[direct_prots], decreasing = TRUE)]
+      }
+      
+      other_prots <- setdiff(V(safe_ppi)$name, direct_prots)
+      if (length(other_prots) > 0) {
+        other_prots <- other_prots[order(deg_all[other_prots], decreasing = TRUE)]
+      }
+      
+      keep_nodes <- c(direct_prots, other_prots)
+      keep_nodes <- head(keep_nodes, MAX_NODES)
+      
+      safe_ppi <- igraph::induced_subgraph(safe_ppi, vids = keep_nodes)
+      safe_ppi <- igraph::delete_vertices(
+        safe_ppi,
+        v = igraph::V(safe_ppi)[igraph::degree(safe_ppi) == 0]
+      )
+      
+      if (length(V(safe_ppi)) == 0 || length(E(safe_ppi)) == 0) {
+        return(ggplot() + 
+                annotate("text", x = 0.5, y = 0.5, 
+                        label = "Non-interacting proteins.", size = 6, color = "red") +
+                theme_void())
+      }
+    }
+    
     degree_centrality <- degree(safe_ppi, mode = "all")
     betweenness_centrality <- betweenness(safe_ppi, directed = FALSE)
     closeness_centrality <- closeness(safe_ppi, mode = "all")
@@ -638,6 +766,7 @@ server <- shinyServer(function(input, output, session){
         plot.title = element_text(family = "DejaVu Sans", face = "bold", size = 13, hjust = 0.5),
         plot.subtitle = element_text(family = "DejaVu Sans", size = 9, color = "gray50", hjust = 0.5))
   })
+
   output$network <- renderPlot(PPI_plot())
   output$download_network <- downloadHandler("ppi.png",
     function(file)
@@ -678,13 +807,22 @@ server <- shinyServer(function(input, output, session){
   })
   output$download_table_csv <- downloadHandler("analysis.csv",function(file) write.csv(analysis_result()$res,file,row.names=F))
   output$analysis_table2 <- renderDT({
-    req(analysis_result())
-    datatable(analysis_result()$prot_bind[,c("chr","position","protein_name")], rownames=F,
-              colnames=c("Chr","Binding Position","Protein"))
+    req(transcript_binding_data())
+    bind <- transcript_binding_data()$prot_bind
+    if (is.null(bind) || nrow(bind) == 0) return(NULL)
+    datatable(
+      bind[, c("Chr", "Position", "Protein_name")],
+      rownames = FALSE,
+      colnames = c("Chr", "Binding Position", "Protein")
+    )
   })
-  output$download_table_csv2 <- downloadHandler("rbp_bind.csv",function(file) write.csv(analysis_result()$prot_bind,file,row.names=F))
 
-
+  output$download_table_csv2 <- downloadHandler("rbp_bind.csv",
+    function(file) {
+      req(transcript_binding_data())
+      write.csv(transcript_binding_data()$prot_bind, file, row.names = FALSE)
+    }
+  )
   
   # Bulk download handlers
   output$downloas_all_data <- downloadHandler(
@@ -698,11 +836,11 @@ server <- shinyServer(function(input, output, session){
   )
   output$downloas_TF_data <- downloadHandler(
     "HuRInterDB_TF.csv",
-    function(file) write.csv(read_parquet("data/tf_data.parquet"), file, row.names=F)
+    function(file) write.csv(read_parquet("data/TF.parquet"), file, row.names=F)
   )
   output$downloas_RBP_data <- downloadHandler(
     "HuRInterDB_RBP.csv",
-    function(file) write.csv(read_parquet("data/rbp_data.parquet"), file, row.names=F)
+    function(file) write.csv(read_parquet("data/RBP.parquet"), file, row.names=F)
   )
 })
 
