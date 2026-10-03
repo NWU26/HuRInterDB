@@ -217,7 +217,7 @@ ui <- shinyUI(
                fluidRow(
                  column(4, div(class = "stat-card",
                                tags$i(class = "fas fa-dna fa-2x", style = "margin-bottom: 1px;"),
-                               h2("2,440,594 lncRNA", style = "margin: 0; font-size: 24px;"))
+                               h2("36,184 lncRNA", style = "margin: 0; font-size: 24px;"))
                  ),
                  column(4, div(class = "stat-card",
                                tags$i(class = "fas fa-project-diagram fa-2x", style = "margin-bottom: 1px;"),
@@ -499,9 +499,9 @@ server <- shinyServer(function(input, output, session){
     if(nrow(dt)==0) return(ggplot()+annotate("text",0.5,0.5,paste("No interaction for",pn),size=6,color="red")+theme_void())
     lnc_vec <- unique(dt$lncRNA_Name[!is.na(dt) & nchar(dt)>0])
     sample_flag <- F
-    if(length(lnc_vec)>300){
+    if(length(lnc_vec)>200){
       set.seed(123)
-      lnc_vec <- sample(lnc_vec,300)
+      lnc_vec <- sample(lnc_vec,200)
       sample_flag <- T
     }
     edges <- data.frame(from=rep(pn,length(lnc_vec)), to=lnc_vec)
@@ -525,7 +525,7 @@ server <- shinyServer(function(input, output, session){
   output$download_protein_network <- downloadHandler(
     paste0("network_",selected_protein_network(),".png"),
     function(file) 
-    ggsave(file, protein_lncRNA_network(), w=14,h=12,dpi=300)
+    ggsave(file, protein_lncRNA_network(), w=14,h=12,dpi=900)
   )
 
   # Main analysis pipeline
@@ -669,7 +669,7 @@ server <- shinyServer(function(input, output, session){
   })
   output$lolliplot <- renderPlot(RBP_plot())
   output$download_lolliplot <- downloadHandler("rbp_plot.png",function(file) 
-  ggsave(file,RBP_plot(),w=10,h=6,dpi=600))
+  ggsave(file,RBP_plot(),w=10,h=6,dpi=900))
 
   # PPI Plot with error capture
   PPI_plot <- reactive({
