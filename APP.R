@@ -27,6 +27,19 @@ data_cache_env <- new.env(hash = TRUE, parent = emptyenv(), size = 3L)
 # Load lightweight lncRNA coordinate data (small volume, no startup block)
 lncRNA_bed_data <- read_parquet(PATH_BED_PARQUET)
 
+# Cache for background proteins used as GO enrichment universe
+background_proteins_cache <- new.env(hash = FALSE, parent = emptyenv())
+
+get_background_proteins <- function() {
+  if (exists("bg", envir = background_proteins_cache)) {
+    return(get("bg", envir = background_proteins_cache))
+  }
+  df <- fetch_filtered_data()
+  bg <- unique(df[, c("Entry", "Protein_name"), drop = FALSE])
+  assign("bg", bg, envir = background_proteins_cache)
+  bg
+}
+
 fetch_filtered_data <- function(filter_rna = NULL, filter_prot = NULL, filter_cell = NULL, filter_method = NULL) {
   ds <- open_dataset(PATH_DATA_PARQUET)
   df <- ds %>% collect()
@@ -563,7 +576,6 @@ server <- shinyServer(function(input, output, session){
   output$download_wordcloud <- downloadHandler("wordcloud.html", function(file) saveWidget(wordcloud_plot(), file))
 
   # RBP Lollipop plot
-  # 动态渲染转录本选择框
   output$transcript_selector <- renderUI({
     req(analysis_result())
     trs <- analysis_result()$transcripts
@@ -580,14 +592,12 @@ server <- shinyServer(function(input, output, session){
     )
   })
 
-  # 根据所选转录本动态计算坐标与结合数据
   transcript_binding_data <- reactive({
     req(analysis_result())
     dat <- analysis_result()
     if (is.null(dat) || nrow(dat$lnc_info) == 0) return(NULL)
 
     tr <- input$selected_transcript
-    # 未选择 / 无效选择时回退到第一个转录本
     if (is.null(tr) || tr == "" || !(tr %in% dat$lnc_info$transcript_id)) {
       tr <- dat$transcripts[1]
     }
@@ -776,10 +786,51 @@ server <- shinyServer(function(input, output, session){
   # GO Dotplot
   GO_plot <- reactive({
     req(analysis_result())
+
     prots <- unique(analysis_result()$res$Protein_name)
-    prots <- prots[nchar(prots)>0]
-    go_obj <- enrichGO(prots, keyType="SYMBOL", OrgDb=org.Hs.eg.db, ont="ALL")
-    dotplot(go_obj, showCategory = 15, 
+    prots <- prots[!is.na(prots) & nchar(prots) > 0]
+    if (length(prots) == 0) {
+      return(
+        ggplot() +
+          annotate("text", 0.5, 0.5,
+                  label = "No proteins for GO enrichment",
+                  size = 5, color = "red") +
+          theme_void()
+      )
+    }
+
+    all_protein <- get_background_proteins()
+    universe_sym <- unique(all_protein$Protein_name)
+    universe_sym <- universe_sym[!is.na(universe_sym) & nchar(universe_sym) > 0]
+
+    go_obj <- tryCatch(
+      enrichGO(
+        gene          = prots,
+        keyType       = "SYMBOL",
+        OrgDb         = org.Hs.eg.db,
+        universe      = universe_sym,
+        ont           = "ALL",
+        pAdjustMethod = "BH",
+        minGSSize     = 10,
+        maxGSSize     = 500,
+        pvalueCutoff  = 1,
+        qvalueCutoff  = 0.05,
+        readable      = TRUE
+      ),
+      error = function(e) NULL
+    )
+
+    if (is.null(go_obj) || nrow(as.data.frame(go_obj)) == 0) {
+      return(
+        ggplot() +
+          annotate("text", 0.5, 0.5,
+                  label = "No GO enrichment results",
+                  size = 5, color = "red") +
+          theme_void()
+      )
+    }
+
+    dotplot(go_obj, showCategory = 15,
             color = "pvalue",
             label_format = 80,
             font.size = 11,
@@ -792,7 +843,6 @@ server <- shinyServer(function(input, output, session){
             legend.title = element_text(family = "DejaVu Sans"),
             plot.background = element_rect(fill = "white", color = NA),
             plot.title = element_text(family = "DejaVu Sans", face = "bold"))
-
   })
   output$godotplot <- renderPlot(GO_plot())
   output$download_godotplot <- downloadHandler("go.png",function(file) 
