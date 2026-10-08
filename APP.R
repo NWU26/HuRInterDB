@@ -294,7 +294,7 @@ ui <- shinyUI(
                                        column(width = 12,
                                        h3("LncRNA Interaction Network for Selected Protein:", style = "color: #0277bd;"),
                                        withSpinner(plotOutput("protein_lncRNA_network",height = "400px", width = "100%"),type = 6, color = "#0277bd"),
-                                       downloadButton("download_protein_network","Download Network (PNG)",class="btn-sm btn-primary")))
+                                       downloadButton("download_protein_network","Download Network (PDF)",class="btn-sm btn-primary")))
                )
       ),
 
@@ -311,7 +311,8 @@ ui <- shinyUI(
                ),
               column(width = 2, style = "padding-top: 55px;",
                      actionBttn(inputId = "analyze_btn", label = "Continue", style = "fill", color = "success", icon = icon("arrow-right"), size = "sm")),
-              column(12, div(class="resultBox",
+
+               column(12, div(class="resultBox",
                               h3("Interaction Analysis Results"),
                               tabsetPanel(
                                 tabPanel("Protein Wordcloud", withSpinner(wordcloud2Output("wordcloud"),type = 6),downloadButton("download_wordcloud", "Download Wordcloud (png)")),
@@ -523,13 +524,12 @@ server <- shinyServer(function(input, output, session){
 
   output$protein_lncRNA_network <- renderPlot(protein_lncRNA_network())
   output$download_protein_network <- downloadHandler(
-    filename = function() paste0("network_", selected_protein_network(), ".pdf"),
+    filename = paste0("network_", selected_protein_network(), ".pdf"),
     content  = function(file) {
       ggsave(file, protein_lncRNA_network(),
              device = cairo_pdf, width = 14, height = 12)
     }
   )
-
   # Main analysis pipeline
   analysis_result <- eventReactive(input$analyze_btn, {
       rna  <- trimws(toupper(input$ana_rna))
@@ -671,14 +671,12 @@ server <- shinyServer(function(input, output, session){
   })
   output$lolliplot <- renderPlot(RBP_plot())
   output$download_lolliplot <- downloadHandler(
-    filename = function() "rbp_plot.pdf",
+    filename = "RBP_plot.pdf",
     content  = function(file) {
       ggsave(file, RBP_plot(),
              device = cairo_pdf, width = 10, height = 6)
     }
   )
-  ggsave(file,RBP_plot(),w=10,h=6,dpi=900))
-
   # PPI Plot with error capture
   PPI_plot <- reactive({
     req(analysis_result())   
@@ -785,9 +783,8 @@ server <- shinyServer(function(input, output, session){
         plot.subtitle = element_text(family = "DejaVu Sans", size = 9, color = "gray50", hjust = 0.5))
   })
 
-  output$network <- renderPlot(PPI_plot())
   output$download_network <- downloadHandler(
-    filename = function() "ppi.pdf",
+    filename = "PPI.pdf",
     content  = function(file) {
       ggsave(file, PPI_plot(),
              device = cairo_pdf, width = 12, height = 10)
@@ -856,7 +853,7 @@ server <- shinyServer(function(input, output, session){
   })
   output$godotplot <- renderPlot(GO_plot())
   output$download_godotplot <- downloadHandler(
-    filename = function() "go.pdf",
+    filename = "GO.pdf",
     content  = function(file) {
       ggsave(file, GO_plot(),
              device = cairo_pdf, width = 12, height = 8)
