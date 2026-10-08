@@ -311,19 +311,18 @@ ui <- shinyUI(
                ),
               column(width = 2, style = "padding-top: 55px;",
                      actionBttn(inputId = "analyze_btn", label = "Continue", style = "fill", color = "success", icon = icon("arrow-right"), size = "sm")),
-
-               column(12, div(class="resultBox",
+              column(12, div(class="resultBox",
                               h3("Interaction Analysis Results"),
                               tabsetPanel(
-                                tabPanel("Protein Wordcloud", withSpinner(wordcloud2Output("wordcloud"),type = 6),downloadButton("download_wordcloud")),
+                                tabPanel("Protein Wordcloud", withSpinner(wordcloud2Output("wordcloud"),type = 6),downloadButton("download_wordcloud", "Download Wordcloud (png)")),
                                 tabPanel("RBP binding", div(style = "margin-bottom: 10px; padding: 5px 0;", uiOutput("transcript_selector")),
-                                          withSpinner(plotOutput("lolliplot"),type = 6),downloadButton("download_lolliplot")),
-                                tabPanel("PPI Network", withSpinner(plotOutput("network"),type = 6),downloadButton("download_network")),
-                                tabPanel("GO Enrichment", withSpinner(plotOutput("godotplot"),type = 6),downloadButton("download_godotplot"))
+                                          withSpinner(plotOutput("lolliplot"),type = 6),downloadButton("download_lolliplot", "Download RBP Plot (PDF)")),
+                                tabPanel("PPI Network", withSpinner(plotOutput("network"),type = 6),downloadButton("download_network",   "Download PPI Network (PDF)")),
+                                tabPanel("GO Enrichment", withSpinner(plotOutput("godotplot"),type = 6),downloadButton("download_godotplot", "Download GO Plot (PDF)"))
                               )),
                h3("List of Interacting Proteins"),br(),
-               column(7,withSpinner(DTOutput("analysis_table"),type = 6),downloadLink("download_table_csv","CSV")),
-               column(5,withSpinner(DTOutput("analysis_table2"),type = 6),downloadLink("download_table_csv2","CSV"))
+               column(7,withSpinner(DTOutput("analysis_table"),type = 6),downloadLink("download_table_csv","Download CSV")),
+               column(5,withSpinner(DTOutput("analysis_table2"),type = 6),downloadLink("download_table_csv2","Download CSV"))
                )
       ),
 
@@ -452,6 +451,7 @@ server <- shinyServer(function(input, output, session){
 
     if ("Score" %in% colnames(disp)) {
       disp$Score <- round(disp$Score, 2)
+      disp <- disp[order(-disp$Score), , drop = FALSE]
     }
 
     # Dynamic JS callback for paginated table rows
@@ -464,8 +464,8 @@ server <- shinyServer(function(input, output, session){
     ')
 
     datatable(disp,escape = FALSE,filter = "top",rownames = FALSE,colnames = c("lncRNA","lncRNA Locate","Protein","Protein Domain","Protein KEGG","Cell Line","Method","Score","Reference"),
-      callback = table_callback, # Critical dynamic event binding
-      options = list(pageLength = 10,lengthMenu = c(10, 25, 50),deferRender = TRUE # Speed up large dataset rendering
+      callback = table_callback,
+      options = list(pageLength = 10,lengthMenu = c(10, 25, 50),deferRender = TRUE
       )
     )
   })
@@ -523,9 +523,11 @@ server <- shinyServer(function(input, output, session){
 
   output$protein_lncRNA_network <- renderPlot(protein_lncRNA_network())
   output$download_protein_network <- downloadHandler(
-    paste0("network_",selected_protein_network(),".png"),
-    function(file) 
-    ggsave(file, protein_lncRNA_network(), w=14,h=12,dpi=900)
+    filename = function() paste0("network_", selected_protein_network(), ".pdf"),
+    content  = function(file) {
+      ggsave(file, protein_lncRNA_network(),
+             device = cairo_pdf, width = 14, height = 12)
+    }
   )
 
   # Main analysis pipeline
@@ -668,7 +670,13 @@ server <- shinyServer(function(input, output, session){
       )
   })
   output$lolliplot <- renderPlot(RBP_plot())
-  output$download_lolliplot <- downloadHandler("rbp_plot.png",function(file) 
+  output$download_lolliplot <- downloadHandler(
+    filename = function() "rbp_plot.pdf",
+    content  = function(file) {
+      ggsave(file, RBP_plot(),
+             device = cairo_pdf, width = 10, height = 6)
+    }
+  )
   ggsave(file,RBP_plot(),w=10,h=6,dpi=900))
 
   # PPI Plot with error capture
@@ -778,11 +786,13 @@ server <- shinyServer(function(input, output, session){
   })
 
   output$network <- renderPlot(PPI_plot())
-  output$download_network <- downloadHandler("ppi.png",
-    function(file)
-    ggsave(file,PPI_plot(),w=12,h=10)
+  output$download_network <- downloadHandler(
+    filename = function() "ppi.pdf",
+    content  = function(file) {
+      ggsave(file, PPI_plot(),
+             device = cairo_pdf, width = 12, height = 10)
+    }
   )
-
   # GO Dotplot
   GO_plot <- reactive({
     req(analysis_result())
@@ -845,9 +855,13 @@ server <- shinyServer(function(input, output, session){
             plot.title = element_text(family = "DejaVu Sans", face = "bold"))
   })
   output$godotplot <- renderPlot(GO_plot())
-  output$download_godotplot <- downloadHandler("go.png",function(file) 
-  ggsave(file,GO_plot(),w=12,h=8))
-
+  output$download_godotplot <- downloadHandler(
+    filename = function() "go.pdf",
+    content  = function(file) {
+      ggsave(file, GO_plot(),
+             device = cairo_pdf, width = 12, height = 8)
+    }
+  )
   # Analysis tables
   output$analysis_table <- renderDT({
     req(analysis_result())
